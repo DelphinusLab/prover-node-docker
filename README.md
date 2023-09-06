@@ -1,0 +1,109 @@
+# Prover Node Docker
+
+This is the docker container for the prover node. This container is responsible for running the prover node and handling tasks from the server.
+
+## Table of Contents
+
+- [Environment Setup](#environment)
+  - [Setting up the Host Machine](#setting-up-the-host-machine)
+- [Building](#building)
+  - [Important](#important)
+  - [Build the Docker Image](#build-the-docker-image)
+- [Running](#running)
+  - [Prover Node Configuration](#prover-node-configuration)
+
+## Environment
+
+The prover node requires a CUDA capable GPU, currently at minimum an RTX 4090.
+
+The docker container is built on top of Nvidia's docker runtime and requires the Nvidia docker runtime to be installed on the host machine.
+
+### Setting up the Host Machine
+
+- Install Docker (From Nvidia, but feel free to install yourself!) https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#setting-up-docker
+
+- Install Docker Compose
+  https://docs.docker.com/compose/install/linux/#install-the-plugin-manually
+
+- Install the Nvidia CUDA Toolkit + Nvidia docker runtime
+
+We need to install the nvidia-container-toolkit on the host machine. This is a requirement for the docker container to be able to access the GPU.
+
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#setting-up-nvidia-container-toolkit
+
+Since the docs aren't the clearest, these are the commands to copy paste!
+
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+```
+
+and then
+
+`sudo apt-get update`
+
+and then
+
+`sudo apt-get install -y nvidia-container-toolkit`
+
+Configure Docker daemon to use the `nvidia` runtime as the default runtime.
+
+`sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`
+
+Restart the docker daemon
+
+`sudo systemctl restart docker` (Ubuntu)
+
+`sudo service docker restart` (WSL Ubuntu)
+
+Another method to set the runtime is to run this script after the cuda toolkit is installed.
+https://github.com/NVIDIA/nvidia-docker
+
+`sudo nvidia-ctk runtime configure`
+
+## Building
+
+The image is currently built with
+
+- Ubuntu 20.04
+- CUDA 12.2
+- Nodejs 16.X
+- zkWASM #6939b3b9eb6d4e75a0d133cbe986acaf6128e8c0
+
+If you wish to change the versions of the above, you can edit the `Dockerfile` and `docker-compose.yml` files.
+
+### **Important**!
+
+Currently with the framework structure, the `truffle-config.js` must be filled out at build time. This is because the `truffle-config.js` is copied into the docker container at build time. This is a temporary solution at the moment.
+
+Ensure the provider details for each chain is filled out in the `truffle-config.js` file.
+
+### Build the Docker Image
+
+To Build the docker image, run the following command in the root directory of the repository.
+
+`bash build_image.sh`
+
+We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
+
+## Running
+
+### Prover Node Configuration
+
+**Important!**
+
+This configuration file may change in the future. The prover node is currently in development and is subject to change. Ensure it is up to date with the latest version of the node.
+
+The prover node requires a configuration file to be passed in at runtime.
+
+- `server_url` - The URL of the server to connect to for tasks. The provided URL is the dockers reference to the host machines 'localhost'
+- `priv_key` - The private key of the prover node. This is used for `Deploy` tasks.
+
+Ensure the chains for deployment are as expected, and the provider details are correct as per the template.
+
+Start the docker container simply with the following command
+
+`docker compose up`
