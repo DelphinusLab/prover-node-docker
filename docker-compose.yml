@@ -3,7 +3,7 @@ version: "3.8"
 services:
   prover-node:
     image: zkwasm:latest
-    user: "1001:1001"
+    user: root
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,7 +13,7 @@ services:
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
       # Volume for the logs directory to persist logs
-      - prover-logs-volume:/home/zkwasm/prover-node-release/logs
+      - prover-logs-volume:/home/zkwasm/prover-node-release/logs/prover
     environment:
       - TZ=Etc/UTC
       - NVM_DIR=/home/zkwasm/.nvm
