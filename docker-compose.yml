@@ -3,7 +3,7 @@ version: "3.8"
 services:
   prover-node:
     image: zkwasm:latest
-    user: root
+    user: "1001:1001"
     build:
       context: .
       dockerfile: Dockerfile
