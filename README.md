@@ -20,6 +20,14 @@ The docker container is built on top of Nvidia's docker runtime and requires the
 
 ### Setting up the Host Machine
 
+- Install NVIDIA Drivers for Ubuntu
+
+  https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#prerequisites
+
+  https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
+
+  You can check if you have drivers installed with `nvidia-smi`
+
 - Install Docker (From Nvidia, but feel free to install yourself!) https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#setting-up-docker
 
 - Install Docker Compose
