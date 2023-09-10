@@ -22,7 +22,7 @@ WORKDIR /home/zkwasm
 RUN git config --global url.https://github.com/.insteadOf git@github.com: && \
     git clone https://github.com/DelphinusLab/zkWasm.git && \
     cd zkWasm && \
-    git checkout 6939b3b9eb6d4e75a0d133cbe986acaf6128e8c0 && \
+    git checkout 738bdb7d23b8c67ab62203884d1dce207d3e920b && \
     git submodule sync && \
     git submodule update --init --recursive
 
