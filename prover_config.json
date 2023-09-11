@@ -1,7 +1,7 @@
 {
   "server_url": "http://172.17.0.1:8080",
   "priv_key": "<PRIVATE_KEY>",
-  "whitelist_users": [],
+  "whitelisted_users": [],
   "deployment_chain_list": [
     {
       "chain_id": 5,
