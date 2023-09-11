@@ -38,11 +38,18 @@ RUN sudo apt-get update && \
     sudo apt-get update && \
     sudo apt-get install solc -y
 
-RUN git clone https://github.com/DelphinusLab/prover-node-release
+RUN git clone https://github.com/DelphinusLab/prover-node-release && \
+    cd prover-node-release && \
+    git checkout 048fa7c74a3386119aaaa0b55b4eff38fea54f27
+
 WORKDIR /home/zkwasm/prover-node-release
 
 # Unpack tarball
-RUN tar -xvf prover_node.tar
+RUN tar -xvf prover_node_Ubuntu2004.tar
+
+# Create prover log folder
+RUN mkdir logs && \
+    mkdir logs/prover
 
 # Install Node.js
 RUN sudo apt-get update && \
