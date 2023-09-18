@@ -64,7 +64,7 @@ RUN sudo apt-get update && \
 RUN sudo npm install -g truffle
 
 # npm install deploy packages
-WORKDIR /home/zkwasm/prover-node-release/deploy
+WORKDIR /home/zkwasm/prover-node-release/deploy_core/deploy
 RUN sudo npm install
 
 WORKDIR /home/zkwasm/prover-node-release

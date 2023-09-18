@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
-      - ./truffle-config.js:/home/zkwasm/prover-node-release/deploy/truffle-config.js
+      - ./truffle-config.js:/home/zkwasm/prover-node-release/deploy_core/deploy/truffle-config.js
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
