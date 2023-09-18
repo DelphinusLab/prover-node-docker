@@ -64,11 +64,8 @@ RUN sudo apt-get update && \
 RUN sudo npm install -g truffle
 
 # npm install deploy packages
-WORKDIR /home/zkwasm/prover-node-release/workspace/deploy
+WORKDIR /home/zkwasm/prover-node-release/deploy
 RUN sudo npm install
-
-### Load Truffle Config from outside of container (currently hard to copy into workspace, if workspace also is volume)
-COPY truffle-config.js /home/zkwasm/prover-node-release/workspace/deploy/truffle-config.js
 
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script
