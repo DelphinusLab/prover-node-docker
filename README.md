@@ -79,7 +79,6 @@ The image is currently built with
 - Ubuntu 20.04
 - CUDA 12.2
 - Nodejs 16.X
-- zkWASM #738bdb7d23b8c67ab62203884d1dce207d3e920b
 - prover-node-release #9a62817c1ac6355f76f47db6df2836db6a02467e
 
 If you wish to change the versions of the above, you can edit the `Dockerfile` and `docker-compose.yml` files.

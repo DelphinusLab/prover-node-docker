@@ -18,16 +18,8 @@ RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- --default-toolchain nightly -y 
 
 WORKDIR /home/zkwasm
-# Support for cloning from github via https for submodules (wasmi) and download zkWasm repo
-RUN git config --global url.https://github.com/.insteadOf git@github.com: && \
-    git clone https://github.com/DelphinusLab/zkWasm.git && \
-    cd zkWasm && \
-    git checkout 738bdb7d23b8c67ab62203884d1dce207d3e920b && \
-    git submodule sync && \
-    git submodule update --init --recursive
-
-WORKDIR /home/zkwasm/zkWasm
-RUN cargo build --release --features cuda 
+# Support for cloning from github via https 
+RUN git config --global url.https://github.com/.insteadOf git@github.com: 
 
 # Install solidity compiler
 WORKDIR /home/zkwasm
