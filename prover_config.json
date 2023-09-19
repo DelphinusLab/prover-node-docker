@@ -7,7 +7,7 @@
       "chain_id": 5,
       "chain_name": "goerli",
       "block_explorer_url": "https://goerli.etherscan.io",
-      "rpc_url": "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+      "rpc_url": "https://goerli.infura.io/v3",
       "native_currency": {
         "name": "Goerli Ether",
         "symbol": "goETH",
