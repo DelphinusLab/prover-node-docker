@@ -80,16 +80,13 @@ The image is currently built with
 - CUDA 12.2
 - Nodejs 16.X
 - zkWASM #738bdb7d23b8c67ab62203884d1dce207d3e920b
+- prover-node-release #9a62817c1ac6355f76f47db6df2836db6a02467e
 
 If you wish to change the versions of the above, you can edit the `Dockerfile` and `docker-compose.yml` files.
 
-### **Important**!
-
-Currently with the framework structure, the `truffle-config.js` must be filled out at build time. This is because the `truffle-config.js` is copied into the docker container at build time. This is a temporary solution at the moment.
-
-Ensure the provider details for each chain is filled out in the `truffle-config.js` file.
-
 ### Build the Docker Image
+
+Better clean the old docker image/volumes if you want.
 
 To Build the docker image, run the following command in the root directory of the repository.
 
@@ -111,6 +108,12 @@ The prover node requires a configuration file to be passed in at runtime.
 - `priv_key` - The private key of the prover node. This is used for `Deploy` tasks.
 
 Ensure the chains for deployment are as expected, and the provider details are correct as per the template.
+
+### **Important**!
+
+Ensure the networks within the truffle config are correct. Docker will bind mount this file into the container, and the container will use the networks specified in this config file.
+
+## Start
 
 Start the docker container simply with the following command
 

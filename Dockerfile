@@ -40,7 +40,7 @@ RUN sudo apt-get update && \
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout 048fa7c74a3386119aaaa0b55b4eff38fea54f27
+    git checkout 9a62817c1ac6355f76f47db6df2836db6a02467e
 
 WORKDIR /home/zkwasm/prover-node-release
 
@@ -64,11 +64,8 @@ RUN sudo apt-get update && \
 RUN sudo npm install -g truffle
 
 # npm install deploy packages
-WORKDIR /home/zkwasm/prover-node-release/workspace/deploy
+WORKDIR /home/zkwasm/prover-node-release/deploy_core/deploy
 RUN sudo npm install
-
-### Load Truffle Config from outside of container (currently hard to copy into workspace, if workspace also is volume)
-COPY truffle-config.js /home/zkwasm/prover-node-release/workspace/deploy/truffle-config.js
 
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script
