@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.2.0-devel-ubuntu20.04
+FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 # Install required packages and setup ssh access
@@ -37,7 +37,7 @@ RUN git clone https://github.com/DelphinusLab/prover-node-release && \
 WORKDIR /home/zkwasm/prover-node-release
 
 # Unpack tarball
-RUN tar -xvf prover_node_Ubuntu2004.tar
+RUN tar -xvf prover_node_Ubuntu2204.tar
 
 # Create prover log folder
 RUN mkdir logs && \
