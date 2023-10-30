@@ -43,22 +43,6 @@ RUN tar -xvf prover_node_Ubuntu2204.tar
 RUN mkdir logs && \
     mkdir logs/prover
 
-# Install Node.js
-RUN sudo apt-get update && \
-    sudo apt-get install -y ca-certificates curl gnupg && \
-    sudo mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-    sudo apt-get update && \
-    sudo apt-get install -y nodejs
-
-# currently sudo install with user seems best. Some trouble installing some packages as root
-RUN sudo npm install -g truffle
-
-# npm install deploy packages
-WORKDIR /home/zkwasm/prover-node-release/deploy_core/deploy
-RUN sudo npm install
-
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script
 CMD bash start_prover.sh
