@@ -1,55 +1,12 @@
 {
-  "server_url": "http://172.17.0.1:8080",
-  "priv_key": "<PRIVATE_KEY>",
+  "server_url": "http://localhost:8080",
+  "priv_key": "PRIVATE_KEY",
   "whitelisted_users": [],
-  "deployment_chain_list": [
-    {
-      "chain_id": 5,
-      "chain_name": "goerli",
-      "block_explorer_url": "https://goerli.etherscan.io",
-      "rpc_url": "https://goerli.infura.io/v3",
-      "native_currency": {
-        "name": "Goerli Ether",
-        "symbol": "goETH",
-        "decimals": 18
-      },
-      "deploy_fee": "0.5"
-    },
-    {
-      "chain_id": 97,
-      "chain_name": "bsctestnet",
-      "block_explorer_url": "https://testnet.bscscan.com",
-      "rpc_url": "https://data-seed-prebsc-1-s3.binance.org:8545",
-      "native_currency": {
-        "name": "Test BNB",
-        "symbol": "tBNB",
-        "decimals": 18
-      },
-      "deploy_fee": "0.003"
-    },
-    {
-      "chain_id": 11155111,
-      "chain_name": "sepolia",
-      "block_explorer_url": "https://sepolia.etherscan.io",
-      "rpc_url": "https://rpc.sepolia.org",
-      "native_currency": {
-        "name": "Sepolia Ether",
-        "symbol": "seETH",
-        "decimals": 18
-      },
-      "deploy_fee": "0.002"
-    },
-    {
-      "chain_id": 44787,
-      "chain_name": "alfajores",
-      "block_explorer_url": "https://alfajores-blockscout.celo-testnet.org",
-      "rpc_url": "https://alfajores-forno.celo-testnet.org",
-      "native_currency": {
-        "name": "Alfajores Celo",
-        "symbol": "A-CELO",
-        "decimals": 18
-      },
-      "deploy_fee": "0.002"
-    }
-  ]
+  "system_warnings": {
+    "disk_usage_warning_level": 80.0,
+    "memory_usage_warning_level": 80.0,
+    "gpu_memory_usage_warning_level": 80.0,
+    "cpu_temp_warning_level": 75.0,
+    "gpu_temp_warning_level": 75.0
+  }
 }

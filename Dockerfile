@@ -32,7 +32,7 @@ RUN sudo apt-get update && \
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout 9a62817c1ac6355f76f47db6df2836db6a02467e
+    git checkout 16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
 
 WORKDIR /home/zkwasm/prover-node-release
 
@@ -42,22 +42,6 @@ RUN tar -xvf prover_node_Ubuntu2204.tar
 # Create prover log folder
 RUN mkdir logs && \
     mkdir logs/prover
-
-# Install Node.js
-RUN sudo apt-get update && \
-    sudo apt-get install -y ca-certificates curl gnupg && \
-    sudo mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-    sudo apt-get update && \
-    sudo apt-get install -y nodejs
-
-# currently sudo install with user seems best. Some trouble installing some packages as root
-RUN sudo npm install -g truffle
-
-# npm install deploy packages
-WORKDIR /home/zkwasm/prover-node-release/deploy_core/deploy
-RUN sudo npm install
 
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script

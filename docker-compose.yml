@@ -3,13 +3,26 @@ version: "3.8"
 services:
   prover-node:
     image: zkwasm:latest
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              # Use all GPUs available on the system by default
+              count: all
+              # If you want to specify which GPUs to use, uncomment the following line
+              # and specify the GPU IDs. You can run `nvidia-smi` to see the GPU IDs.
+              # Ensure 'count' field above is commented out if uncommenting the following line as they are mutually exclusive.
+              # ref:: https://docs.docker.com/compose/gpu-support/
+              # device_ids: ['0', '1']
+              capabilities: [gpu]
     user: "1001:1001"
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
-      - ./truffle-config.js:/home/zkwasm/prover-node-release/deploy_core/deploy/truffle-config.js
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
