@@ -78,7 +78,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #9a62817c1ac6355f76f47db6df2836db6a02467e
+- prover-node-release #16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
 
 If you wish to change the versions of the above, you can edit the `Dockerfile` and `docker-compose.yml` files.
 
@@ -103,10 +103,16 @@ This configuration file may change in the future. The prover node is currently i
 The prover node requires a configuration file to be passed in at runtime.
 
 - `server_url` - The URL of the server to connect to for tasks. The provided URL is the dockers reference to the host machines 'localhost'
-- `priv_key` - The private key of the prover node. This is used for `Deploy` tasks.
+- `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node.
 
 ## Start
 
 Start the docker container simply with the following command
 
 `docker compose up`
+
+To start multiple containers on a machine, use the following command
+
+`docker compose -p <node> up` where `node` is the name of the container you would like to start.
+
+Ensure the docker compose file has GPU's specified for each container.

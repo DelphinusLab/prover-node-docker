@@ -32,7 +32,7 @@ RUN sudo apt-get update && \
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout 9a62817c1ac6355f76f47db6df2836db6a02467e
+    git checkout 16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
 
 WORKDIR /home/zkwasm/prover-node-release
 
