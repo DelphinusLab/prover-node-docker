@@ -114,5 +114,15 @@ Start the docker container simply with the following command
 To start multiple containers on a machine, use the following command
 
 `docker compose -p <node> up` where `node` is the name of the container you would like to start.
+or 
+Add your custom container name like this:
+```
+services:
+  prover-node:
+    image: zkwasm:latest
+    container_name: prove_node_1
+    runtime: nvidia
+```
+and start by `docker compose up`
 
 Ensure the docker compose file has GPU's specified for each container.
