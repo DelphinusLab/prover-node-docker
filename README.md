@@ -115,12 +115,11 @@ To start multiple containers on a machine, use the following command
 
 `docker compose -p <node> up` where `node` is the name of the container you would like to start.
 or 
-Add your custom container name like this:
+change the  your custom container name like this:
 ```
 services:
-  prover-node:
+  prover-node_1:
     image: zkwasm:latest
-    container_name: prove_node_1
     runtime: nvidia
 ```
 and start by `docker compose up`
