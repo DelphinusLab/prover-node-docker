@@ -24,13 +24,12 @@ RUN git config --global url.https://github.com/.insteadOf git@github.com:
 # Install solidity compiler
 WORKDIR /home/zkwasm
 RUN sudo apt-get update && \
-    sudo apt update && \
     sudo apt-get install -y software-properties-common && \
     sudo rm -rf /var/lib/apt/lists/* && \
     sudo add-apt-repository ppa:ethereum/ethereum && \
     sudo apt-get update && \
     sudo apt-get install solc -y && \
-    sudo apt install apache2-utils
+    sudo apt-get install apache2-utils
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
