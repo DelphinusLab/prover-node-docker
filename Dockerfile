@@ -24,15 +24,17 @@ RUN git config --global url.https://github.com/.insteadOf git@github.com:
 # Install solidity compiler
 WORKDIR /home/zkwasm
 RUN sudo apt-get update && \
+    sudo apt update && \
     sudo apt-get install -y software-properties-common && \
     sudo rm -rf /var/lib/apt/lists/* && \
     sudo add-apt-repository ppa:ethereum/ethereum && \
     sudo apt-get update && \
-    sudo apt-get install solc -y
+    sudo apt-get install solc -y && \
+    sudo apt install apache2-utils
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout 16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
+    git checkout zkwas-274
 
 WORKDIR /home/zkwasm/prover-node-release
 
@@ -45,4 +47,4 @@ RUN mkdir logs && \
 
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script
-CMD bash start_prover.sh
+CMD bash runprover.sh

@@ -1,6 +1,9 @@
 {
   "server_url": "http://localhost:8080",
   "priv_key": "PRIVATE_KEY",
+  "big_file_timeout": 1800,
+  "get_timeout": 300,
+  "post_timeout": 300,
   "whitelisted_users": [],
   "system_warnings": {
     "disk_usage_warning_level": 80.0,
@@ -8,5 +11,6 @@
     "gpu_memory_usage_warning_level": 80.0,
     "cpu_temp_warning_level": 75.0,
     "gpu_temp_warning_level": 75.0
-  }
+  },
+  "max_debug_log_size_to_rest_server": 4194304
 }
