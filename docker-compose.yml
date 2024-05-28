@@ -31,14 +31,17 @@ services:
       # configure huge pages for the prover
       - /dev/hugepages:/dev/hugepages
     environment:
+      # Uncomment this to enable the prover to use a specific GPU in multiple GPU systems, should only use in conjunction with `count: all` or `device_ids` with more than 1 option
+      # - CUDA_VISIBLE_DEVICES=0
       - TZ=Etc/UTC
       - NVM_DIR=/home/zkwasm/.nvm
       - NODE_VERSION=16.19.1
       - PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-    command: bash -c "
-      nvidia-smi && \
-      CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace -p \
-      2>&1 | rotatelogs -e -n 10 logs/prover/prover$1_$time.log 100M"
+    # Uncomment this to customize the command to run the prover node
+    # command: bash -c "
+    #   nvidia-smi && \
+    #   CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace -p \
+    #   2>&1 | rotatelogs -e -n 10 logs/prover/prover$1_$time.log 100M"
 volumes:
   workspace-volume:
   prover-logs-volume:
