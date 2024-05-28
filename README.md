@@ -116,7 +116,11 @@ For a machine running a single prover node, the value should be set to ~15000. T
 
 ### GPU Configuration
 
-If you need to specify GPUs, you can do so in the `docker-compose.yml` file. The `devices` section is where you can specify the GPU's to use.
+If you need to specify GPUs, you can do so in the `docker-compose.yml` file. The `device_ids` field is where you can specify the GPU's to use.
+
+The starting command for the container will use `CUDA_VISIBLE_DEVICES=0` to specify the GPU to use.
+
+You may also change the `device_ids` field in the `docker-compose.yml` file to specify the GPU's to use. Note that in the container the GPU indexing starts at 0.
 
 Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
 

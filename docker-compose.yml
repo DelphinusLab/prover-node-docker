@@ -31,8 +31,6 @@ services:
       # configure huge pages for the prover
       - /dev/hugepages:/dev/hugepages
     environment:
-      # Uncomment this to enable the prover to use a specific GPU in multiple GPU systems, should only use in conjunction with `count: all` or `device_ids` with more than 1 option
-      # - CUDA_VISIBLE_DEVICES=0
       - TZ=Etc/UTC
       - NVM_DIR=/home/zkwasm/.nvm
       - NODE_VERSION=16.19.1
