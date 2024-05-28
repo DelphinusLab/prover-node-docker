@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-server 
 USER zkwasm
 
 # Install Rust toolchain 
-ENV PATH="/home/zkwasm/.cargo/bin:${PATH}"
-RUN curl https://sh.rustup.rs -sSf | \
-    sh -s -- --default-toolchain nightly -y 
+# ENV PATH="/home/zkwasm/.cargo/bin:${PATH}"
+# RUN curl https://sh.rustup.rs -sSf | \
+#     sh -s -- --default-toolchain nightly -y 
 
 WORKDIR /home/zkwasm
 # Support for cloning from github via https 
@@ -29,7 +29,7 @@ RUN sudo apt-get update && \
     sudo add-apt-repository ppa:ethereum/ethereum && \
     sudo apt-get update && \
     sudo apt-get install solc -y && \
-    sudo apt-get install apache2-utils
+    sudo apt update -y && sudo apt install -y apache2-utils
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
@@ -46,4 +46,4 @@ RUN mkdir logs && \
 
 WORKDIR /home/zkwasm/prover-node-release
 # Run the start script
-CMD bash runprover.sh
+CMD bash start_prover.sh

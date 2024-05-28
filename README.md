@@ -80,7 +80,8 @@ The image is currently built with
 - CUDA 12.2
 - prover-node-release #16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
 
-If you wish to change the versions of the above, you can edit the `Dockerfile` and `docker-compose.yml` files.
+**Important!**
+The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
 ### Build the Docker Image
 
@@ -105,6 +106,20 @@ The prover node requires a configuration file to be passed in at runtime.
 - `server_url` - The URL of the server to connect to for tasks. The provided URL is the dockers reference to the host machines 'localhost'
 - `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node.
 
+### HugePages Configuration
+
+It is important to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
+
+For a machine running a single prover node, the value should be set to ~15000. This is done with the following command.
+
+`sysctl -w vm.nr_hugepages=15000`
+
+### GPU Configuration
+
+If you need to specify GPUs, you can do so in the `docker-compose.yml` file. The `devices` section is where you can specify the GPU's to use.
+
+Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
+
 ## Start
 
 Start the docker container simply with the following command
@@ -114,6 +129,5 @@ Start the docker container simply with the following command
 To start multiple containers on a machine, use the following command
 
 `docker compose -p <node> up` where `node` is the name of the container you would like to start.
-
 
 Ensure the docker compose file has GPU's specified for each container.
