@@ -78,7 +78,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #16d9ae092a289bf9b810f3aae6d3c2d27bf7f11f
+- prover-node-release #f2d2ffc6154dff58343bef325f1be8e1d234a4cf
 
 **Important!**
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
