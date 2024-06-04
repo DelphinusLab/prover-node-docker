@@ -4,6 +4,7 @@ services:
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
+    network_mode: "host"
     deploy:
       resources:
         reservations:
