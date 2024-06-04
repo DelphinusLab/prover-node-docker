@@ -1,6 +1,15 @@
 version: "3.8"
 
 services:
+  mongodb:
+    image: mongo
+    ports:
+        - '27017:27017'
+    container_name: zkwasm-mongodb
+    restart: always
+    logging:
+        options:
+            max-size: 1g
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
