@@ -10,6 +10,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-server 
     && echo 'zkwasm:zkwasm' | chpasswd \
     && echo 'zkwasm ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    echo "Etc/UTC" > /etc/timezone
+COPY ./install_mongo.sh .
+RUN ./install_mongo.sh
+
 # Switch to the zkwasm user for subsequent commands
 USER zkwasm
 
