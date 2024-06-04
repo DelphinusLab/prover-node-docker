@@ -10,12 +10,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-server 
     && echo 'zkwasm:zkwasm' | chpasswd \
     && echo 'zkwasm ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+# Installing mongo DB
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
-    echo "Etc/UTC" > /etc/timezone
-COPY ./install_mongo.sh .
-RUN ./install_mongo.sh
+RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+    && echo "Etc/UTC" > /etc/timezone \
+    && sudo apt-get install gnupg curl \
+    && curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor \
+    && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list \
+    && sudo apt-get update \
+    && sudo apt-get install -y mongodb-org
 
 # Switch to the zkwasm user for subsequent commands
 USER zkwasm
