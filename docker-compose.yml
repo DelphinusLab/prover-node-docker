@@ -1,18 +1,14 @@
 version: "3.8"
 
-networks:
-  local-network:
-    driver: bridge
-
 services:
   mongodb:
     image: mongo
     ports:
       - '27017:27017'
     volumes:
-      - ./db:/data/db
-    networks:
-      - local-network
+      - ./mongo/db:/data/db
+      - ./mongo/log:/log
+      - ./mongod.conf:/etc/mongod.conf
     container_name: zkwasm-mongodb
     restart: always
     logging:
@@ -21,8 +17,7 @@ services:
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
-    networks:
-      - local-network
+    network_mode: "host"
     deploy:
       resources:
         reservations:
