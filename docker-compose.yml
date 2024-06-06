@@ -7,13 +7,11 @@ services:
       - '27017:27017'
     volumes:
       - ./mongo/db:/data/db
-      - ./mongo/log:/log
-      - ./mongod.conf:/etc/mongod.conf
+      - ./mongo/log:/data/db/log
+      - ./mongod.conf:/data/configdb/mongod.conf
+    command: --config /data/configdb/mongod.conf
     container_name: zkwasm-mongodb
     restart: always
-    logging:
-        options:
-            max-size: 1g
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
