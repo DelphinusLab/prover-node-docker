@@ -167,7 +167,7 @@ Docker logs all of standard output of a container into the folder `/var/lib/dock
 Log rotation is enabled for both containers. Let's walk through the specified configuration parameters:
 - `driver: "json-file"`: Specifies the logging driver. The json-file driver is the default and logs container output in JSON format.
 - `max-size: "10m"`: Sets the maximum size of each log file to 10 megabytes. When this is exceeded the log is rotated.
-- `max-file: "3"`: Specifies the maximum number of log files to keep. When the maximum number is reached, the oldest log file is deleted.
+- `max-file: "5"`: Specifies the maximum number of log files to keep. When the maximum number is reached, the oldest log file is deleted.
 More details can be found [here](https://docs.docker.com/config/containers/logging/configure/).
 
 ###### Network mode
