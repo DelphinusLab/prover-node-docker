@@ -7,7 +7,7 @@ services:
       - '27017:27017'
     volumes:
       - ./mongo/db:/data/db
-      - ./mongo/log:/data/db/log
+      - ./mongo/log:/data/configdb/log
       - ./mongod.conf:/data/configdb/mongod.conf
     command: --config /data/configdb/mongod.conf
     container_name: zkwasm-mongodb
