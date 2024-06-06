@@ -124,6 +124,56 @@ You may also change the `device_ids` field in the `docker-compose.yml` file to s
 
 Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
 
+### MongoDB Configuration
+
+MongoDB will work "out-of-the-box", however, if you need to do something specific, please refer the following section.
+
+#### Customising the MongoDB docker container
+
+##### The `mongo` docker image
+
+For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's important to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+
+##### The `mongo` daemon config file
+
+Even though we use a pre-build `mongo` image, this doesn't limit our customisability, because we are still able to pass command line arguments into the image via the `docker-compose` file. The most flexible way of customisation is by specifying a `mongod.conf` file and passing it to `mongod` via `--config` argument, this is what we have done to set the db path. The full list of customisation options are available [here.](https://www.mongodb.com/docs/manual/reference/configuration-options/)
+
+##### The docker compose config file
+
+###### DB Storage
+
+Important to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+```yaml
+services:
+  mongodb:
+     volumes:
+       - /home/user/anotherdb:/data/db
+```
+###### DB Port
+
+We don't set the **PORT** in the config file, rather, **the PORT is set in `docker-compose.yml`**; simply change the bindings, so your specific port is mapped to the port used by `mongo` image, e.g. changing port to `8099` is done like so:
+```yaml
+services:
+  mongodb:
+    ports:
+      - '8099:27017'
+```
+
+###### Logging and log rotation
+
+`mongo`'s logging feature is very basic and doesn't have the ability to clean up old logs, so instead we use dockers logging feature.
+
+Docker logs all of standard output of a container into the folder `/var/lib/docker/containers/<container-id>/`.
+Log rotation is enabled for both containers. Let's walk through the specified configuration parameters:
+- `driver: "json-file"`: Specifies the logging driver. The json-file driver is the default and logs container output in JSON format.
+- `max-size: "10m"`: Sets the maximum size of each log file to 10 megabytes. When this is exceeded the log is rotated.
+- `max-file: "5"`: Specifies the maximum number of log files to keep. When the maximum number is reached, the oldest log file is deleted.
+More details can be found [here](https://docs.docker.com/config/containers/logging/configure/).
+
+###### Network mode
+
+Finally, we use `host` `network_mode`, this is because our server code refers to `mongo` DB via its local IP, i.e. localhost; if we want to switch to docker network mode then the code would need to be updated to use the public IP which would just be the host's public IP.
+
 ## Start
 
 Start the docker container simply with the following command
