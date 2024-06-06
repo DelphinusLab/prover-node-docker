@@ -124,6 +124,34 @@ You may also change the `device_ids` field in the `docker-compose.yml` file to s
 
 Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
 
+### MongoDB Configuration
+
+MongoDB will work "out-of-the-box", however, if you need to do something specific, please refer the following section.
+
+#### Customising the MongoDB docker container
+
+##### The `mongo` docker image
+
+For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's important to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+
+##### The `mongo` daemon config file
+
+Even though we use a pre-build `mongo` image, this doesn't limit our customisability, because we are still able to pass command line arguments into the image via the `docker-compose` file. The most flexible way of customisation is by specifying a `mongod.conf` file and passing it to `mongod` via `--config` argument, this is what we have done; we set the following: db path, log path, log rotation type, and replication set name. The full list of customisation options are available [here.](https://www.mongodb.com/docs/manual/reference/configuration-options/)
+
+Important to note is that our db storage and logging are both mounted locally under `./mongo` directory. The paths are specified in the `mongod.conf` and the mount points are specified in `docker-compose.yml`. Since the log path is specified, all diagnostic logging information is sent to a file with log rotation enabled instead of standard output; if you want to enable logging to standard output, you must remove the `systemLog` section of the `mongod.conf` config file. Alternatively, you can simply `tail` the mount point, e.g. `taif -f ./mongo/log/mongod.log`
+
+##### The docker compose config file
+
+We don't set the **PORT** in the config file, rather, **the PORT is set in `docker-compose.yml`**; simply change the bindings, so your specific port is mapped to the port used by `mongo` image, e.g.:
+```yaml
+services:
+  mongodb:
+    ports:
+      - '<YOUR-SPECIFIC-IP>:27017'
+```
+
+Finally, we use `host` `network_mode`, this is because our server code refers to `mongo` DB via its local IP, i.e. localhost; if we want to switch to docker network mode then the code would need to be updated to use the public IP which would just be the host's public IP.
+
 ## Start
 
 Start the docker container simply with the following command
