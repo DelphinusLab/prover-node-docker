@@ -43,15 +43,10 @@ services:
       - TZ=Etc/UTC
     # Override default command to run as a dry-run service
     command: bash -c "
-      [ -d "./logs/dry_run" ] || mkdir -p logs/dry_run
       time=$(date +%Y-%m-%d-%H-%M-%S)
 
-      if ! which rotatelogs > /dev/null; then
-      echo "Log rotation tool, 'rotatelogs', is not installed. Please install 'rotatelogs'"
-      exit 1
-      fi
       RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w server_storage --dryrun=prover \
-      2>&1 | rotatelogs -e -n 10 logs/dry_run/dry_run_$time.log 100M"
+      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$time.log 100M"
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
