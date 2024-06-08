@@ -3,8 +3,9 @@ version: "3.8"
 services:
   mongodb:
     image: mongo:latest
-    ports:
-      - "27017:27017"
+    network_mode: "host"
+    # ports:
+    #   - "27017:27017"
     volumes:
       - ./mongo/db:/data/db
       - ./mongod.conf:/data/configdb/mongod.conf

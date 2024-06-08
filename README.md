@@ -191,7 +191,7 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 ## Start
 
-Start the docker container simply with the following command
+Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal.
 
 `docker compose up`
 
@@ -200,3 +200,17 @@ To start multiple containers on a machine, use the following command
 `docker compose -p <node> up` where `node` is the name of the container you would like to start.
 
 Ensure the docker compose file has GPU's specified for each container.
+
+### Starting individual services
+
+It may be cleaner to start services individually. You can start each in a new terminal window, or in the background.
+
+To start each service in the background, use the following command
+
+`docker compose start <service>`
+
+To start an attached service, use the following command:
+
+`docker compose up <service>`
+
+It is required to start `mongodb` service first and then `prover-node` + `prover-dry-run-service` services.
