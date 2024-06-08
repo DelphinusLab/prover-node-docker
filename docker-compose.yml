@@ -31,8 +31,7 @@ services:
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
       # Volume for the logs directory to persist logs
-      - dry-run-logs-volume:/home/zkwasm/prover-node-release/logs/logging:
-    driver: none
+      - dry-run-logs-volume:/home/zkwasm/prover-node-release/logs/dry_run
       # configure huge pages for the prover
       - /dev/hugepages:/dev/hugepages
     logging:
