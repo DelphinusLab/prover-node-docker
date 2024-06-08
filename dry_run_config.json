@@ -1,0 +1,5 @@
+{
+  "server_url": "http://localhost:8080",
+  "mongodb_uri": "mongodb://localhost:27017",
+  "private_key": "PRIVATE_KEY"
+}

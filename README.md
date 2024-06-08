@@ -106,6 +106,17 @@ The prover node requires a configuration file to be passed in at runtime.
 - `server_url` - The URL of the server to connect to for tasks. The provided URL is the dockers reference to the host machines 'localhost'
 - `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node.
 
+### Dry Run Service Configuration
+
+The Dry Run service will be required to run parallel to the prover node. The Dry Run service is responsible for synchronising tasks with the server and ensuring the prover node is working correctly.
+This service must be run in parallel to the prover node, so running the service through docker compose is recommended.
+
+In the `dry_run_config.json` file, modify the connection strings to the server and the MongoDB instance.
+
+- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node.
+- `mongodb_uri` - The URI of the MongoDB instance to connect to.
+- `priv_key` - Private Key is NOT used in the Dry Run service when run parallel to the prover node, so it can be ignored.
+
 ### HugePages Configuration
 
 It is important to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
@@ -143,20 +154,23 @@ Even though we use a pre-build `mongo` image, this doesn't limit our customisabi
 ###### DB Storage
 
 Important to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+
 ```yaml
 services:
   mongodb:
-     volumes:
-       - /home/user/anotherdb:/data/db
+    volumes:
+      - /home/user/anotherdb:/data/db
 ```
+
 ###### DB Port
 
 We don't set the **PORT** in the config file, rather, **the PORT is set in `docker-compose.yml`**; simply change the bindings, so your specific port is mapped to the port used by `mongo` image, e.g. changing port to `8099` is done like so:
+
 ```yaml
 services:
   mongodb:
     ports:
-      - '8099:27017'
+      - "8099:27017"
 ```
 
 ###### Logging and log rotation
@@ -165,10 +179,11 @@ services:
 
 Docker logs all of standard output of a container into the folder `/var/lib/docker/containers/<container-id>/`.
 Log rotation is enabled for both containers. Let's walk through the specified configuration parameters:
+
 - `driver: "json-file"`: Specifies the logging driver. The json-file driver is the default and logs container output in JSON format.
 - `max-size: "10m"`: Sets the maximum size of each log file to 10 megabytes. When this is exceeded the log is rotated.
 - `max-file: "5"`: Specifies the maximum number of log files to keep. When the maximum number is reached, the oldest log file is deleted.
-More details can be found [here](https://docs.docker.com/config/containers/logging/configure/).
+  More details can be found [here](https://docs.docker.com/config/containers/logging/configure/).
 
 ###### Network mode
 
