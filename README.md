@@ -176,6 +176,7 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 ## Start
 
+Make sure you had built the image via `bash build_image.sh`
 Start the docker container simply with the following command
 
 `docker compose up`
