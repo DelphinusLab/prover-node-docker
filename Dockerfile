@@ -31,5 +31,5 @@ RUN mkdir logs && \
     mkdir logs/prover
 
 WORKDIR /home/zkwasm/prover-node-release
-# Run the start script
-CMD bash start_prover.sh
+# Command overriden by docker-compose
+CMD ["true"]
