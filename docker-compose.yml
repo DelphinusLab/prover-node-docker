@@ -44,10 +44,10 @@ services:
       - TZ=Etc/UTC
     # Override default command to run as a dry-run service
     command: bash -c "
-      time=$(date +%Y-%m-%d-%H-%M-%S)
+      time=$$(date +%Y-%m-%d-%H-%M-%S)
 
       RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover \
-      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$time.log 100M"
+      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$$time.log 100M"
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
@@ -91,9 +91,9 @@ services:
       - PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
     command: bash -c "
       nvidia-smi && \
-      time=$(date +%Y-%m-%d-%H-%M-%S)
+      time=$$(date +%Y-%m-%d-%H-%M-%S)
       CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
-      2>&1 | rotatelogs -e -n 10 logs/prover/prover$1_$time.log 100M"
+      2>&1 | rotatelogs -e -n 10 logs/prover/prover_$$time.log 100M"
 volumes:
   workspace-volume:
   prover-logs-volume:
