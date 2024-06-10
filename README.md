@@ -11,6 +11,9 @@ This is the docker container for the prover node. This container is responsible 
   - [Build the Docker Image](#build-the-docker-image)
 - [Running](#running)
   - [Prover Node Configuration](#prover-node-configuration)
+  - [Dry Run Service Configuration](#dry-run-service-configuration)
+  - [HugePages Configuration](#hugepages-configuration)
+  - [GPU Configuration](#gpu-configuration)
 
 ## Environment
 
@@ -173,6 +176,10 @@ services:
       - "8099:27017"
 ```
 
+If using host network mode, the port is not required to be specified.
+
+Specify the port by adding `--port 8099` to the `command` field in the `docker-compose.yml` file for the mongodb service.
+
 ###### Logging and log rotation
 
 `mongo`'s logging feature is very basic and doesn't have the ability to clean up old logs, so instead we use dockers logging feature.
@@ -214,3 +221,56 @@ To start an attached service, use the following command:
 `docker compose up <service>`
 
 It is required to start `mongodb` service first and then `prover-node` + `prover-dry-run-service` services.
+
+### Multiple Nodes on the same machine
+
+To run multiple prover nodes on the same machine, it is recommended to clone the repository and modify the required files.
+
+- `docker-compose.yml`
+- `prover-node-config.json`
+- `dry_run_config.json`
+
+There are a few things to consider when running multiple nodes on the same machine.
+
+- GPU
+- MongoDB instance
+- Config file information
+- Docker volume and container names
+
+#### GPU
+
+Ensure the GPU's are specified in the `docker-compose.yml` file for each node.
+It is crucial that each GPU is only used ONCE otherwise you may encounter out of memory errors.
+We recommend to set the `device_ids` field where you can specify the GPU to use in each `docker-compose.yml` file.
+
+As mentioned, use `nvidia-smi` to check the GPU index and ensure the `device_ids` field is set correctly and uniquely.
+
+#### MongoDB instance
+
+Ensure the MongoDB instance is unique for each node. This is done by modifying the `docker-compose.yml` file for each node.
+
+- Modify the `mongodb`services - `container_name` field to a unique value such as `zkwasm-mongodb-2` etc.
+- Set the correct port to bind to the host machine. Please refer to the MongoDB configuration section for more information.
+  - If using host network mode, the port is not required to be specified under services, but may be specified as part of the command field e.g `--port 8099`.
+
+Ensure the `dry_run_config.json` file is updated with the correct MongoDB URI for each node.
+
+#### Config file information
+
+Ensure the `prover-config.json` file is updated with the correct server URL and private key for each node.
+
+Private key should be UNIQUE for each node.
+
+Ensure the `dry_run_config.json` file is updated with the correct server URL and MongoDB URI for each node.
+
+#### Docker volume and container names
+
+Ensure the docker volumes are unique for each node. This is done by modifying the `docker-compose.yml` file for each node.
+
+The simplest method is to start the containers with a different project name from other directories/containers.
+
+`docker compose -p <node> up -d`
+
+Where `node` is the custom name of the services you would like to start i.e `node-2`. This is important to separate the containers and volumes from each other.
+
+Follow the output of the container with `docker logs -f <node>_<service>` (Full name of container, which can be found with `docker ps` or `docker container ls`)
