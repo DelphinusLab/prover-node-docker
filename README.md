@@ -213,13 +213,14 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 ## Start
 
-Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal.
+Make sure you had built the image via `bash build_image.sh`
+Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode.
 
 `docker compose up`
 
 To start multiple containers on a machine, use the following command
 
-`docker compose -p <node> up` where `node` is the name of the container you would like to start.
+`docker compose -p <node> up` where `node` is the unique name of the container/project you would like to start.
 
 Ensure the docker compose file has GPU's specified for each container.
 
