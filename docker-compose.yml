@@ -47,7 +47,7 @@ services:
       time=$$(date +%Y-%m-%d-%H-%M-%S)
 
       RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover \
-      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$$time.log 100M"
+      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$${time}.log 100M"
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
@@ -93,7 +93,7 @@ services:
       nvidia-smi && \
       time=$$(date +%Y-%m-%d-%H-%M-%S)
       CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
-      2>&1 | rotatelogs -e -n 10 logs/prover/prover_$$time.log 100M"
+      2>&1 | rotatelogs -e -n 10 logs/prover/prover_$${time}.log 100M"
 volumes:
   workspace-volume:
   prover-logs-volume:
