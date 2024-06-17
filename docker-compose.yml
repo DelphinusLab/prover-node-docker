@@ -4,11 +4,15 @@ services:
   params-ftp:
     image: rhaoio/params
     network_mode: "host"
+    # ports:
+    #   - "21:21"
+    #   - "30000-30009:30000-30009"
     environment:
       PUBLICHOST: "localhost"
       FTP_USER_NAME: ftpuser
       FTP_USER_PASS: ftppassword
       FTP_USER_HOME: /home/ftpuser
+      # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
   mongodb:
     image: mongo:latest
     network_mode: "host"
@@ -100,8 +104,7 @@ services:
     command: bash -c "
       nvidia-smi && \
       time=$$(date +%Y-%m-%d-%H-%M-%S)
-      # FTP download the params from local container (localhost)
-      lftp -e 'set ftp:passive-mode true; mirror --parallel=10 /params/ /workspace/static/ -e --include-glob *.params; exit' -u ftpuser,ftppassword ftp-server && \
+      wget -r -nH --cut-dirs=1 --no-parent --user=ftpuser --password=ftppassword ftp://localhost/params/ -P /home/zkwasm/prover-node-release/workspace/static/ &&
       CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
       2>&1 | rotatelogs -e -n 10 logs/prover/prover_$${time}.log 100M"
 volumes:

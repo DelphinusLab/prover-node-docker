@@ -2,8 +2,8 @@ FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 # Install required packages and setup ssh access
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server sudo cmake curl build-essential git && rm -rf /var/lib/apt/lists/* \
-    && sudo apt update -y && sudo apt install -y apache2-utils lftp \
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server sudo cmake curl build-essential git wget && rm -rf /var/lib/apt/lists/* \
+    && sudo apt update -y && sudo apt install -y apache2-utils \
     && mkdir /var/run/sshd \
     && /etc/init.d/ssh start \
     && useradd -rm -d /home/zkwasm -s /bin/bash -g root -G sudo -u 1001 zkwasm \
