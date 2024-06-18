@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   params-ftp:
     image: rhaoio/params
@@ -14,9 +12,10 @@ services:
       FTP_USER_HOME: /home/ftpuser
       # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "21"]
-      interval: 30s
-      timeout: 10s
+      # Basic health check to ensure the FTP server is running
+      test: "ls -l /var/run/pure-ftpd.pid"
+      interval: 5s
+      timeout: 5s
       retries: 3
   mongodb:
     image: mongo:latest
@@ -72,8 +71,6 @@ services:
     runtime: nvidia
     network_mode: "host"
     depends_on:
-      prover-dry-run-service:
-        condition: service_healthy
       params-ftp:
         condition: service_healthy
     deploy:
