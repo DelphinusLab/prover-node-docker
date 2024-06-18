@@ -13,6 +13,11 @@ services:
       FTP_USER_PASS: ftppassword
       FTP_USER_HOME: /home/ftpuser
       # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "21"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
   mongodb:
     image: mongo:latest
     network_mode: "host"
