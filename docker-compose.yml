@@ -37,8 +37,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      depends_on:
-        - mongodb
+    depends_on:
+      - mongodb
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
       - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
