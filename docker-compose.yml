@@ -37,6 +37,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      depends_on:
+        - mongodb
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
       - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
@@ -64,6 +66,11 @@ services:
     image: zkwasm:latest
     runtime: nvidia
     network_mode: "host"
+    depends_on:
+      prover-dry-run-service:
+        condition: service_healthy
+      params-ftp:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -98,13 +105,10 @@ services:
         max-file: "5"
     environment:
       - TZ=Etc/UTC
-      - NVM_DIR=/home/zkwasm/.nvm
-      - NODE_VERSION=16.19.1
-      - PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
     command: bash -c "
       nvidia-smi && \
-      time=$$(date +%Y-%m-%d-%H-%M-%S)
       wget -r -nH --cut-dirs=1 --no-parent --user=ftpuser --password=ftppassword ftp://localhost/params/ -P /home/zkwasm/prover-node-release/workspace/static/ &&
+      time=$$(date +%Y-%m-%d-%H-%M-%S)
       CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
       2>&1 | rotatelogs -e -n 10 logs/prover/prover_$${time}.log 100M"
 volumes:
