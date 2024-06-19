@@ -12,16 +12,15 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-    command: --config /data/configdb/mongod.conf --port ${MONGODB_PORT}
+    command: --config /data/configdb/mongod.conf
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:${MONGODB_PORT}/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      start_period: 5s
       interval: 30s
       timeout: 10s
       retries: 3
     container_name: zkwasm-mongodb
     restart: always
-    environment:
-      MONGODB_PORT: 27017
   prover-dry-run-service:
     image: zkwasm:latest
     runtime: nvidia
@@ -33,6 +32,12 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    healthcheck:
+      test: pgrep -f zkwasm-playground
+      start_period: 15s
+      interval: 15s
+      timeout: 5s
+      retries: 3
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
       - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
@@ -61,7 +66,7 @@ services:
     runtime: nvidia
     network_mode: "host"
     depends_on:
-      mongodb:
+      prover-dry-run-service:
         condition: service_healthy
     deploy:
       resources:
