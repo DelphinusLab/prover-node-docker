@@ -1,0 +1,19 @@
+services:
+  params-ftp:
+    image: rhaoio/params
+    network_mode: "host"
+    # ports:
+    #   - "21:21"
+    #   - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftppassword
+      FTP_USER_HOME: /home/ftpuser
+      # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
+    healthcheck:
+      # Basic health check to ensure the FTP server is running
+      test: "ls -l /var/run/pure-ftpd.pid"
+      interval: 30s
+      timeout: 10s
+      retries: 3

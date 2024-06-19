@@ -1,16 +1,4 @@
 services:
-  params-ftp:
-    image: rhaoio/params
-    network_mode: "host"
-    # ports:
-    #   - "21:21"
-    #   - "30000-30009:30000-30009"
-    environment:
-      PUBLICHOST: "localhost"
-      FTP_USER_NAME: ftpuser
-      FTP_USER_PASS: ftppassword
-      FTP_USER_HOME: /home/ftpuser
-      # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
   mongodb:
     image: mongo:latest
     network_mode: "host"
@@ -24,9 +12,16 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-    command: --config /data/configdb/mongod.conf
+    command: --config /data/configdb/mongod.conf --port ${MONGODB_PORT}
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:${MONGODB_PORT}/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
     container_name: zkwasm-mongodb
     restart: always
+    environment:
+      MONGODB_PORT: 27017
   prover-dry-run-service:
     image: zkwasm:latest
     runtime: nvidia
@@ -36,7 +31,8 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
       - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
@@ -64,6 +60,9 @@ services:
     image: zkwasm:latest
     runtime: nvidia
     network_mode: "host"
+    depends_on:
+      mongodb:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
