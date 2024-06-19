@@ -11,12 +11,6 @@ services:
       FTP_USER_PASS: ftppassword
       FTP_USER_HOME: /home/ftpuser
       # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
-    healthcheck:
-      # Basic health check to ensure the FTP server is running
-      test: "ls -l /var/run/pure-ftpd.pid"
-      interval: 5s
-      timeout: 5s
-      retries: 3
   mongodb:
     image: mongo:latest
     network_mode: "host"
@@ -70,9 +64,6 @@ services:
     image: zkwasm:latest
     runtime: nvidia
     network_mode: "host"
-    depends_on:
-      params-ftp:
-        condition: service_healthy
     deploy:
       resources:
         reservations:
