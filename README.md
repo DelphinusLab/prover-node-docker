@@ -195,6 +195,16 @@ services:
 If using host network mode, the port mapping will be ignored, and the port will be the default `27017`.
 Specify the port by adding `--port <PORT>` to the `command` field in the `docker-compose.yml` file for the mongodb service.
 
+**Important** If you change the DB Port under network_mode: host, you must also update the healthcheck to use the correct port.
+
+```yaml
+services:
+  mongodb:
+    command: --config /data/configdb/mongod.conf --port 8099
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:8099/test --quiet
+```
+
 ##### Logging and log rotation
 
 `mongo`'s logging feature is very basic and doesn't have the ability to clean up old logs, so instead we use dockers logging feature.
@@ -213,32 +223,27 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 </details>
 
-## Start
+## Quick Start
+
+We require our Params FTP Server to be running before starting the prover node. The prover node must copy the parameters from the FTP server to it's own volume to operate correctly.
+
+### Params FTP Server
+
+Start the FTP server with `docker compose up params-ftp -f ftp-docker-compose.yml`.
+
+The default port is `21` and the default user is `ftpuser` with password `ftppassword`. The ports used for file transfer are `30000-30009`.
+
+### Prover Node
 
 Make sure you had built the image via `bash build_image.sh`
+
+Once the Params FTP server is running, you can start the prover node.
+
 Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode.
 
-`docker compose up`
+`docker compose up prover-node` This will run the base services in order of mongodb, dry-run-service, prover-node
 
-To start multiple containers on a machine, use the following command
-
-`docker compose -p <node> up` where `node` is the unique name of the container/project you would like to start.
-
-Ensure the docker compose file has GPU's specified for each container.
-
-### Starting individual services
-
-It may be cleaner to start services individually. You can start each in a new terminal window, or in the background.
-
-To start each service in the background, use the following command
-
-`docker compose start <service>`
-
-To start an attached service, use the following command:
-
-`docker compose up <service>`
-
-It is required to start `mongodb` service first and then `prover-node` + `prover-dry-run-service` services.
+## Multiple Prover Nodes
 
 ### Multiple Nodes on the same machine
 
@@ -270,6 +275,12 @@ Ensure the MongoDB instance is unique for each node. This is done by modifying t
 - Modify the `mongodb`services - `container_name` field to a unique value such as `zkwasm-mongodb-2` etc.
 - Set the correct port to bind to the host machine. Please refer to the MongoDB configuration section for more information.
   - If using host network mode, the port is not required to be specified under services, but may be specified as part of the command field e.g `--port 8099`.
+  - If supplying a custom port with `network_mode: host`, ensure the port is unique for each node. Ensure the healthcheck is updated to use the correct port.
+    ```yaml
+    command: --config /data/configdb/mongod.conf --port XXXX
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:XXXX/test --quiet
+    ```
 
 Ensure the `dry_run_config.json` file is updated with the correct MongoDB URI for each node.
 
@@ -287,7 +298,7 @@ Ensure the docker volumes are unique for each node. This is done by modifying th
 
 The simplest method is to start the containers with a different project name from other directories/containers.
 
-`docker compose -p <node> up -d`
+`docker compose -p <node> up prover-node`, This should start the services in order of mongodb, dry-run-service, prover-node
 
 Where `node` is the custom name of the services you would like to start i.e `node-2`. This is important to separate the containers and volumes from each other.
 
