@@ -292,6 +292,14 @@ Private key should be UNIQUE for each node.
 
 Ensure the `dry_run_config.json` file is updated with the correct server URL and MongoDB URI for each node.
 
+#### HugePages Configuration
+
+Running multiple nodes requires HugePages to be expanded to accommodate the memory requirements of each node.
+
+Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepages` is set to the correct value on the **HOST MACHINE**.
+
+`sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.
+
 #### Docker volume and container names
 
 Ensure the docker volumes are unique for each node. This is done by modifying the `docker-compose.yml` file for each node.
