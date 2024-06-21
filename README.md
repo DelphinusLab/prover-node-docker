@@ -327,7 +327,7 @@ Upgrading the prover node requires rebuilding the docker image with the new prov
 
 Stop all containers with `docker compose down`.
 
-Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id`.
+Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id>`.
 
 Prune the containers with `docker container prune`.
 
@@ -336,6 +336,8 @@ Prune the containers with `docker container prune`.
 Pull the latest changes from the repository with `git pull`.
 
 You many need to stash changes if you have modified the `docker-compose.yml` file and apply them again.
+
+Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, ensure the changes are applied again.
 
 ### Delete Volume
 
