@@ -15,6 +15,7 @@ This is the docker container for the prover node. This container is responsible 
   - [HugePages Configuration](#hugepages-configuration)
   - [GPU Configuration](#gpu-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
+- [Upgrading Prover Node](#upgrading-prover-node)
 
 ## Environment
 
@@ -229,7 +230,7 @@ We require our Params FTP Server to be running before starting the prover node. 
 
 ### Params FTP Server
 
-Start the FTP server with `docker compose up params-ftp -f ftp-docker-compose.yml`.
+Start the FTP server with `docker compose  -f ftp-docker-compose.yml up params-ftpup`.
 
 The default port is `21` and the default user is `ftpuser` with password `ftppassword`. The ports used for file transfer are `30000-30009`.
 
@@ -241,7 +242,7 @@ Once the Params FTP server is running, you can start the prover node.
 
 Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode.
 
-`docker compose up prover-node` This will run the base services in order of mongodb, dry-run-service, prover-node
+`docker compose up` This will run the base services in order of mongodb, dry-run-service, prover-node
 
 ## Multiple Prover Nodes
 
@@ -306,8 +307,44 @@ Ensure the docker volumes are unique for each node. This is done by modifying th
 
 The simplest method is to start the containers with a different project name from other directories/containers.
 
-`docker compose -p <node> up prover-node`, This should start the services in order of mongodb, dry-run-service, prover-node
+`docker compose -p <node_name> up`, This should start the services in order of mongodb, dry-run-service, prover-node
 
 Where `node` is the custom name of the services you would like to start i.e `node-2`. This is important to separate the containers and volumes from each other.
 
-Follow the output of the container with `docker logs -f <node>_<service>` (Full name of container, which can be found with `docker ps` or `docker container ls`)
+### Logs
+
+If you need to follow the logs/output of a specific container,
+
+First navigate to the corresponding directory with the `docker-compose.yml` file.
+
+Then run `docker logs -f <service-name>`
+
+Where `service-name` is the name of the SERVICE named in t he docker compose file (mongodb, prover-node etc.)
+
+## Upgrading Prover Node
+
+Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
+
+Stop all containers with `docker compose down`.
+
+Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id`.
+
+Prune the containers with `docker container prune`.
+
+### Pull Latest Changes
+
+Pull the latest changes from the repository with `git pull`.
+
+You many need to stash changes if you have modified the `docker-compose.yml` file and apply them again.
+
+### Delete Volume
+
+Find the correct volume you would like to delete with `docker volume ls`.
+
+Delete the main prover-node `workspace_volume` with `docker volume rm <volume_name>`.
+
+### Rebuild Docker Image
+
+Remove the old docker image with `docker image ls` to check the image name and then `docker image rm zkwasm:latest`
+
+Rebuild the docker image with `bash build_image.sh`.

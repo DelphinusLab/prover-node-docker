@@ -1,6 +1,7 @@
 services:
   mongodb:
     image: mongo:latest
+    attach: false
     network_mode: "host"
     # ports:
     #   - "27017:27017"
