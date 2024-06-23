@@ -1,6 +1,6 @@
 services:
   params-ftp:
-    image: rhaoio/params
+    image: zkwasm/params
     network_mode: "host"
     # ports:
     #   - "21:21"
