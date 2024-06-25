@@ -96,6 +96,8 @@ services:
       - prover-logs-volume:/home/zkwasm/prover-node-release/logs/prover
       # configure huge pages for the prover
       - /dev/hugepages:/dev/hugepages
+      # Starting script for the prover
+      - ./_start_prover-node-service.sh:/home/zkwasm/prover-node-release/_start_prover-node-service.sh
     logging:
       driver: "json-file"
       options:
@@ -103,12 +105,11 @@ services:
         max-file: "5"
     environment:
       - TZ=Etc/UTC
-    command: bash -c "
-      nvidia-smi && \
-      wget -r -nH -nv --cut-dirs=1 --no-parent --user=ftpuser --password=ftppassword ftp://localhost/params/ -P /home/zkwasm/prover-node-release/workspace/static/ && \
-      time=$$(date +%Y-%m-%d-%H-%M-%S) && \
-      CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
-      2>&1 | rotatelogs -e -n 10 logs/prover/prover_$${time}.log 100M"
+    command:
+      [
+        "/bin/bash",
+        "/home/zkwasm/prover-node-release/_start_prover-node-service.sh",
+      ]
 volumes:
   workspace-volume:
   prover-logs-volume:
