@@ -343,7 +343,7 @@ Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, 
 
 Find the correct volume you would like to delete with `docker volume ls`.
 
-Delete the main prover-node `workspace_volume` with `docker volume rm <volume_name>`.
+Delete the  prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume"
 
 ### Rebuild Docker Image
 
