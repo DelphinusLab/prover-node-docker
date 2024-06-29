@@ -83,7 +83,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #be216b3fdb562a7e7d5982c6262768e6c977015c
+- prover-node-release #114e7ff7ebcb3c907f540399ee959dfbf811feff
 
 **Important!**
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
@@ -343,7 +343,7 @@ Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, 
 
 Find the correct volume you would like to delete with `docker volume ls`.
 
-Delete the  prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume"
+Delete the prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume"
 
 ### Rebuild Docker Image
 
