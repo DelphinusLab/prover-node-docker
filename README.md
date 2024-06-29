@@ -15,6 +15,7 @@ This is the docker container for the prover node. This container is responsible 
   - [HugePages Configuration](#hugepages-configuration)
   - [GPU Configuration](#gpu-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
+- [Quick Start](#quick-start)
 - [Upgrading Prover Node](#upgrading-prover-node)
 
 ## Environment
@@ -232,7 +233,7 @@ We require our Params FTP Server to be running before starting the prover node. 
 
 ### Params FTP Server
 
-Start the FTP server with `docker compose  -f ftp-docker-compose.yml up params-ftpup`.
+Start the FTP server with `docker compose -f ftp-docker-compose.yml up`.
 
 The default port is `21` and the default user is `ftpuser` with password `ftppassword`. The ports used for file transfer are `30000-30009`.
 
@@ -352,3 +353,9 @@ Delete the prover-node workspace volume with `docker volume rm <volume_name>`. B
 Remove the old docker image with `docker image ls` to check the image name and then `docker image rm zkwasm:latest`
 
 Rebuild the docker image with `bash build_image.sh`.
+
+Then follow the [Quick Start](#quick-start) steps to start.
+
+`docker compose -f ftp-docker-compose.yml up`
+
+`docker compose up`
