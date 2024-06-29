@@ -2,7 +2,7 @@ FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 # Install required packages and setup ssh access
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server sudo cmake curl build-essential git && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server sudo cmake curl build-essential git wget && rm -rf /var/lib/apt/lists/* \
     && sudo apt update -y && sudo apt install -y apache2-utils \
     && mkdir /var/run/sshd \
     && /etc/init.d/ssh start \
@@ -19,7 +19,7 @@ RUN git config --global url.https://github.com/.insteadOf git@github.com:
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout be216b3fdb562a7e7d5982c6262768e6c977015c
+    git checkout a298d2feffd8296cc98b97caf314424942ea1a43
 
 WORKDIR /home/zkwasm/prover-node-release
 

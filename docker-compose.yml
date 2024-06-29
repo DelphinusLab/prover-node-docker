@@ -1,8 +1,7 @@
-version: "3.8"
-
 services:
   mongodb:
     image: mongo:latest
+    attach: false
     network_mode: "host"
     # ports:
     #   - "27017:27017"
@@ -15,6 +14,12 @@ services:
         max-size: "10m"
         max-file: "5"
     command: --config /data/configdb/mongod.conf
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      start_period: 5s
+      interval: 30s
+      timeout: 10s
+      retries: 3
     container_name: zkwasm-mongodb
     restart: always
   prover-dry-run-service:
@@ -25,6 +30,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: pgrep -f zkwasm-playground
+      start_period: 15s
+      interval: 15s
+      timeout: 5s
+      retries: 3
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
       - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
@@ -52,6 +66,9 @@ services:
     image: zkwasm:latest
     runtime: nvidia
     network_mode: "host"
+    depends_on:
+      prover-dry-run-service:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -79,6 +96,8 @@ services:
       - prover-logs-volume:/home/zkwasm/prover-node-release/logs/prover
       # configure huge pages for the prover
       - /dev/hugepages:/dev/hugepages
+      # Starting script for the prover
+      - ./_start_prover-node-service.sh:/home/zkwasm/prover-node-release/_start_prover-node-service.sh
     logging:
       driver: "json-file"
       options:
@@ -86,14 +105,11 @@ services:
         max-file: "5"
     environment:
       - TZ=Etc/UTC
-      - NVM_DIR=/home/zkwasm/.nvm
-      - NODE_VERSION=16.19.1
-      - PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-    command: bash -c "
-      nvidia-smi && \
-      time=$$(date +%Y-%m-%d-%H-%M-%S)
-      CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --dryrunconfig dry_run_config.json -p \
-      2>&1 | rotatelogs -e -n 10 logs/prover/prover_$${time}.log 100M"
+    command:
+      [
+        "/bin/bash",
+        "/home/zkwasm/prover-node-release/_start_prover-node-service.sh",
+      ]
 volumes:
   workspace-volume:
   prover-logs-volume:
