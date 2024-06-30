@@ -332,7 +332,9 @@ Stop all containers with `docker compose down`.
 
 Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id>`.
 
-Prune the containers with `docker container prune`.
+Check docker container status by `docker ps -a`.
+
+Prune the containers with `docker container prune`. Please note this will remove all docker containers, so if you have your own container not related to prover docker, need manually remove container.
 
 ### Pull Latest Changes
 
