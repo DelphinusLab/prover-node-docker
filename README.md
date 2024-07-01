@@ -248,8 +248,9 @@ Start all services at once with the following command, however it may clog up th
 `docker compose up` This will run the base services in order of mongodb, dry-run-service, prover-node
 
 ## Multiple Prover Nodes
-
 ### Multiple Nodes on the same machine
+<details>
+  <summary>Details</summary>
 
 To run multiple prover nodes on the same machine, it is recommended to clone the repository and modify the required files.
 
@@ -313,8 +314,9 @@ The simplest method is to start the containers with a different project name fro
 `docker compose -p <node_name> up`, This should start the services in order of mongodb, dry-run-service, prover-node
 
 Where `node` is the custom name of the services you would like to start i.e `node-2`. This is important to separate the containers and volumes from each other.
+</details>
 
-### Logs
+## Logs
 
 If you need to follow the logs/output of a specific container,
 
