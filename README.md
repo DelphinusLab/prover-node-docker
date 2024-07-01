@@ -243,7 +243,7 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 
 Once the Params FTP server is running, you can start the prover node.
 
-Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode.
+Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
 
 `docker compose up` This will run the base services in order of mongodb, dry-run-service, prover-node
 
