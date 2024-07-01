@@ -239,6 +239,8 @@ The default port is `21` and the default user is `ftpuser` with password `ftppas
 
 Make sure you had built the image via `bash build_image.sh`
 
+Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
+
 Once the Params FTP server is running, you can start the prover node.
 
 Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode.
