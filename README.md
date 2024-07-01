@@ -84,7 +84,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #a298d2feffd8296cc98b97caf314424942ea1a43
+- prover-node-release #b17317107db4973648ddda9fac4d6f449379edc1
 
 **Important!**
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
@@ -105,23 +105,21 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 
 **Important!**
 
-This configuration file may change in the future. The prover node is currently in development and is subject to change. Ensure it is up to date with the latest version of the node.
+`prover_config.json` file is the config file for prover service.
 
-The prover node requires a configuration file to be passed in at runtime.
-
-- `server_url` - The URL of the server to connect to for tasks. The provided URL is the dockers reference to the host machines 'localhost'
-- `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node.
+- `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
+- `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your nodes.
 
 ### Dry Run Service Configuration
 
 The Dry Run service will be required to run parallel to the prover node. The Dry Run service is responsible for synchronising tasks with the server and ensuring the prover node is working correctly.
 This service must be run in parallel to the prover node, so running the service through docker compose is recommended.
 
-In the `dry_run_config.json` file, modify the connection strings to the server and the MongoDB instance.
+`dry_run_config.json` file is the config file for prover dry run service, modify the connection strings to the server and the MongoDB instance.
 
-- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node.
-- `mongodb_uri` - The URI of the MongoDB instance to connect to.
-- `priv_key` - Private Key is NOT used in the Dry Run service when run parallel to the prover node, so it can be ignored.
+- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
+- `mongodb_uri` - The URI of the MongoDB instance to connect to. By default it is "mongodb://localhost:27017". You do not need change it if you start the prover node with `docker compose up` and use default `docker-compose.yml`.
+- `priv_key` - Please fill the same priv_key as in the `prover_config.json` file.
 
 ### HugePages Configuration
 
