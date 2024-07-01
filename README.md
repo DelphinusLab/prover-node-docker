@@ -102,6 +102,7 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 ## Running
 
 ### Prover Node Configuration
+default task server RPC node address: https://rpc.zkwasmhub.com:8090
 
 **Important!**
 
