@@ -7,7 +7,6 @@ This is the docker container for the prover node. This container is responsible 
 - [Environment Setup](#environment)
   - [Setting up the Host Machine](#setting-up-the-host-machine)
 - [Building](#building)
-  - [Important](#important)
   - [Build the Docker Image](#build-the-docker-image)
 - [Running](#running)
   - [Prover Node Configuration](#prover-node-configuration)
@@ -86,7 +85,6 @@ The image is currently built with
 - CUDA 12.2
 - prover-node-release #b17317107db4973648ddda9fac4d6f449379edc1
 
-**Important!**
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
 ### Build the Docker Image
@@ -103,9 +101,7 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 
 ### Prover Node Configuration
 
-**Important!**
-
-`prover_config.json` file is the config file for prover service.
+`prover_config.json` file is the config file for prover node service.
 
 - `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
 - `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your nodes.
@@ -123,7 +119,7 @@ This service must be run in parallel to the prover node, so running the service 
 
 ### HugePages Configuration
 
-It is important to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
+It is  to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
 
 Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.
 
@@ -164,7 +160,7 @@ If you are unsure about modifying or customizing changes, refer to the section b
   
   #### The `mongo` docker image
 
-For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's important to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's  to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
 
 #### The `mongo` daemon config file
 
@@ -174,7 +170,7 @@ Even though we use a pre-build `mongo` image, this doesn't limit our customisabi
 
 ##### DB Storage
 
-Important to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+ to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
 
 ```yaml
 services:
@@ -243,9 +239,9 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 
 Once the Params FTP server is running, you can start the prover node.
 
-Start all services at once with the following command, however it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
+Start all services at once with the command `docker compose up`. However it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
 
-`docker compose up` This will run the base services in order of mongodb, dry-run-service, prover-node
+`docker compose up` will run the base services in order of mongodb, dry-run-service, prover-node service.
 
 ## Multiple Prover Nodes
 ### Multiple Nodes on the same machine
