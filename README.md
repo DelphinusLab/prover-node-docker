@@ -104,7 +104,7 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 `prover_config.json` file is the config file for prover node service.
 
 - `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
-- `priv_key` - The private key of the prover node. This is used to sign the tasks and prove the work was done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your nodes.
+- `priv_key` - The private key of the prover node. This is used to sign the tasks which were done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your node.
 
 ### Dry Run Service Configuration
 
