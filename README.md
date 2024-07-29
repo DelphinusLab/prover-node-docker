@@ -327,6 +327,10 @@ Where `service-name` is the name of the SERVICE named in t he docker compose fil
 
 If you need to check the static logs of the `prover-dry-run-service`, then please navigate to the corresponding logs volume and view from there.
 
+By default, you can run the following command to list the log files stored and then select one to view the contents.
+
+`sudo ls /var/lib/docker/volumes/prover-node-docker_dry-run-logs-volume/_data -lh`
+
 ## Upgrading Prover Node
 
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
