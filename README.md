@@ -325,6 +325,8 @@ Then run `docker logs -f <service-name>`
 
 Where `service-name` is the name of the SERVICE named in t he docker compose file (mongodb, prover-node etc.)
 
+If you need to check the static logs of the `prover-dry-run-service`, then please navigate to the corresponding logs volume and view from there.
+
 ## Upgrading Prover Node
 
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
