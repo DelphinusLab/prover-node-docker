@@ -24,6 +24,7 @@ services:
     restart: always
   prover-dry-run-service:
     image: zkwasm:latest
+    attach: false
     runtime: nvidia
     network_mode: "host"
     user: "1001:1001"
