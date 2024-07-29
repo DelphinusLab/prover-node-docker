@@ -119,7 +119,7 @@ This service must be run in parallel to the prover node, so running the service 
 
 ### HugePages Configuration
 
-It is  to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
+It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
 
 Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.
 
@@ -160,7 +160,7 @@ If you are unsure about modifying or customizing changes, refer to the section b
   
   #### The `mongo` docker image
 
-For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's  to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
 
 #### The `mongo` daemon config file
 
@@ -170,7 +170,7 @@ Even though we use a pre-build `mongo` image, this doesn't limit our customisabi
 
 ##### DB Storage
 
- to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
 
 ```yaml
 services:
@@ -244,7 +244,9 @@ Start all services at once with the command `docker compose up`. However it may 
 `docker compose up` will run the base services in order of mongodb, dry-run-service, prover-node service.
 
 ## Multiple Prover Nodes
+
 ### Multiple Nodes on the same machine
+
 <details>
   <summary>Details</summary>
 
@@ -310,6 +312,7 @@ The simplest method is to start the containers with a different project name fro
 `docker compose -p <node_name> up`, This should start the services in order of mongodb, dry-run-service, prover-node
 
 Where `node` is the custom name of the services you would like to start i.e `node-2`. This is important to separate the containers and volumes from each other.
+
 </details>
 
 ## Logs
@@ -321,6 +324,12 @@ First navigate to the corresponding directory with the `docker-compose.yml` file
 Then run `docker logs -f <service-name>`
 
 Where `service-name` is the name of the SERVICE named in t he docker compose file (mongodb, prover-node etc.)
+
+If you need to check the static logs of the `prover-dry-run-service`, then please navigate to the corresponding logs volume and view from there.
+
+By default, you can run the following command to list the log files stored and then select one to view the contents.
+
+`sudo ls /var/lib/docker/volumes/prover-node-docker_dry-run-logs-volume/_data -lh`
 
 ## Upgrading Prover Node
 
