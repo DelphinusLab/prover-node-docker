@@ -368,3 +368,5 @@ Then follow the [Quick Start](#quick-start) steps to start.
 `docker compose -f ftp-docker-compose.yml up`
 
 `docker compose up`
+
+Notes: If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up`
