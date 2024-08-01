@@ -18,6 +18,9 @@ This is the docker container for the prover node. This container is responsible 
 - [Logs](#logs)
 - [Upgrading Prover Node](#upgrading-prover-node)
 
+
+***If you had installed the prover docker before, please go to the [Upgrading Prover Node](#upgrading-prover-node) section directly for upgrading.***
+
 ## Environment
 
 The prover node requires a CUDA capable GPU, currently at minimum an RTX 4090.
