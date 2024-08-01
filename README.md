@@ -116,7 +116,7 @@ This service must be run in parallel to the prover node, so running the service 
 
 - `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
 - `mongodb_uri` - The URI of the MongoDB instance to connect to. By default it is "mongodb://localhost:27017". You do not need change it if you start the prover node with `docker compose up` and use default `docker-compose.yml`.
-- `priv_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
+- `private_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
 
 ### HugePages Configuration
 
