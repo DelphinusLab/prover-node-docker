@@ -15,6 +15,7 @@ This is the docker container for the prover node. This container is responsible 
   - [GPU Configuration](#gpu-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
 - [Quick Start](#quick-start)
+- [Logs](#logs)
 - [Upgrading Prover Node](#upgrading-prover-node)
 
 ## Environment
@@ -331,6 +332,14 @@ By default, you can run the following command to list the log files stored and t
 
 `sudo ls /var/lib/docker/volumes/prover-node-docker_dry-run-logs-volume/_data -lh`
 
+You can find the latest dry run log file and check the content by : `sudo vim /var/lib/docker/volumes/prover-node-docker_dry-run-logs-volume/_data/[filename.log]`
+
+For prover service log, you can check: (default name configuration)
+```
+sudo ls /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/_data -lh
+sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename.log]
+```
+
 ## Upgrading Prover Node
 
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
@@ -369,4 +378,5 @@ Then follow the [Quick Start](#quick-start) steps to start.
 
 `docker compose up`
 
-Notes: If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again
+Notes: If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again. 
+If it still failed, please check the logs following [Logs](#logs) section
