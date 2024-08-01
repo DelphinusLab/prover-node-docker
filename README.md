@@ -133,6 +133,10 @@ For a machine running a single prover node, the value should be set to ~15000. T
 
 Make sure you use `grep Huge /proc/meminfo` to check it is changed and then start docker containers.
 
+Please note the above will only set the current running system huge pages. I will reset after the machine restarted. If you want to keep it after restarting, add the following entry to the `/etc/sysctl.conf` file:
+
+`vm.nr_hugepages=15000`
+
 ### GPU Configuration
 
 If you need to specify GPUs, you can do so in the `docker-compose.yml` file. The `device_ids` field is where you can specify the GPU's to use.
