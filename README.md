@@ -387,4 +387,5 @@ Then follow the [Quick Start](#quick-start) steps to start.
 
 Note 1: If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again. 
 If it still failed, please check the logs following [Logs](#logs) section
+
 Note 2: If you find your prover failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, they you can just do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again.
