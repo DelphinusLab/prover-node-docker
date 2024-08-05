@@ -385,15 +385,14 @@ Then follow the [Quick Start](#quick-start) steps to start.
 
 `docker compose up`
 
-Note 1: If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again. 
+## Common issues
+
+1.  If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again. 
 If it still failed, please check the logs following [Logs](#logs) section
 
-Note 2: If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, they you can just do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again.
+2. If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
 
-Note 3: If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. Or you can reset it by:
-
-`sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`
-
-`sudo systemctl restart docker` (Ubuntu)
-
-and see whether it fix the issue.
+3. If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. It can be reset by:\
+`sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
+`sudo systemctl restart docker` (Ubuntu)\
+and see whether it fix the issue or not.
