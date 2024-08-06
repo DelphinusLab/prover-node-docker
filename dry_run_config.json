@@ -1,6 +1,6 @@
 {
   "server_url": "http://localhost:8080",
-  "mongodb_uri": "mongodb://localhost:27017",
+  "mongodb_uri": "mongodb://mongodb:27017",
   "private_key": "PRIVATE_KEY",
   "big_file_timeout": 1800,
   "get_timeout": 300,

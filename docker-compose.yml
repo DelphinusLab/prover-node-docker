@@ -1,7 +1,8 @@
 services:
   zkwasm-params:
     image: zkwasm/params
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
     container_name: zkwasm-params
     environment:
       PUBLICHOST: "zkwasm-params"
@@ -22,7 +23,8 @@ services:
   mongodb:
     image: mongo:latest
     attach: false
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
     container_name: zkwasm-mongodb
     # ports:
     #   - "27017:27017"
@@ -41,14 +43,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    container_name: zkwasm-mongodb
     restart: always
 
   prover-dry-run-service:
     image: zkwasm:latest
     attach: false
     runtime: nvidia
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
     container_name: zkwasm-prover-dryrun
     user: "1001:1001"
     build:
@@ -90,7 +92,8 @@ services:
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
     container_name: zkwasm-prover
     depends_on:
       prover-dry-run-service:
