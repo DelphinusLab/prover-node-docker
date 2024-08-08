@@ -396,3 +396,5 @@ If it still failed, please check the logs following [Logs](#logs) section
 `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
 `sudo systemctl restart docker` (Ubuntu)\
 and see whether it fix the issue or not.
+
+4. If you meet prover service endless dot issue, it is a known bug and just stop and start the prover container will resolve it.
