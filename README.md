@@ -18,8 +18,7 @@ This is the docker container for the prover node. This container is responsible 
 - [Logs](#logs)
 - [Upgrading Prover Node](#upgrading-prover-node)
 
-
-***If you had installed the prover docker before, please go to the [Upgrading Prover Node](#upgrading-prover-node) section directly for upgrading.***
+**_If you had installed the prover docker before, please go to the [Upgrading Prover Node](#upgrading-prover-node) section directly for upgrading._**
 
 ## Environment
 
@@ -87,7 +86,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #38cbc6eccbc4a906c5c0fd30a7c858a46bff11fd
+- prover-node-release #0abb629f892bd04bcdad985f0940288b0470d10c
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
@@ -342,6 +341,7 @@ By default, you can run the following command to list the log files stored and t
 You can find the latest dry run log file and check the content by : `sudo vim /var/lib/docker/volumes/prover-node-docker_dry-run-logs-volume/_data/[filename.log]`
 
 For prover service log, you can check: (default name configuration)
+
 ```
 sudo ls /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/_data -lh
 sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename.log]
@@ -387,14 +387,14 @@ Then follow the [Quick Start](#quick-start) steps to start.
 
 ## Common issues
 
-1.  If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again. 
-If it still failed, please check the logs following [Logs](#logs) section
+1.  If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again.
+    If it still failed, please check the logs following [Logs](#logs) section
 
-2. If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
+2.  If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
 
-3. If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. It can be reset by:\
-`sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
-`sudo systemctl restart docker` (Ubuntu)\
-and see whether it fix the issue or not.
+3.  If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. It can be reset by:\
+    `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
+    `sudo systemctl restart docker` (Ubuntu)\
+    and see whether it fix the issue or not.
 
-4. If you meet prover service endless dot issue, it is a known bug and just stop and start the prover container will temp workround it. We are fixing the issue and will release new version soon.
+4.  If you meet prover service endless dot issue, it is a known bug and just stop and start the prover container will temp workround it. We are fixing the issue and will release new version soon.
