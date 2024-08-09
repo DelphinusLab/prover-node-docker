@@ -397,4 +397,3 @@ Then follow the [Quick Start](#quick-start) steps to start.
     `sudo systemctl restart docker` (Ubuntu)\
     and see whether it fix the issue or not.
 
-4.  If you meet prover service endless dot issue, it is a known bug and just stop and start the prover container will temp workround it. We are fixing the issue and will release new version soon.
