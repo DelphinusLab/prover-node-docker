@@ -128,7 +128,7 @@ This service must be run in parallel to the prover node, so running the service 
 
 ~~Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.~~
 
-~~For a machine running a single prover node, the value should be set to ~15000. This is done with the following command.~~
+~~For a machine running a single prover node, the value should be set to 15000. This is done with the following command.~~
 
 ~~`sysctl -w vm.nr_hugepages=15000`~~
 
