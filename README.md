@@ -120,7 +120,9 @@ This service must be run in parallel to the prover node, so running the service 
 - `mongodb_uri` - The URI of the MongoDB instance to connect to. By default it is "mongodb://localhost:27017". You do not need change it if you start the prover node with `docker compose up` and use default `docker-compose.yml`.
 - `private_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
 
-### HugePages Configuration (No need in this version)
+### HugePages Configuration 
+
+(No need in this version)
 
 ~~It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.~~
 
