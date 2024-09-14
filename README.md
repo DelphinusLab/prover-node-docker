@@ -370,7 +370,9 @@ Prune the containers with `docker container prune`. Please note this will remove
 
 ### Remove the huge page memory to free your memory
 
-In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run.
+In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run. 
+
+We can check the memory by `free -h` to confirm the machine has more than 95GB available memory.
 
 Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory.
 
