@@ -374,7 +374,7 @@ In previous version we require 15000 pages of huge page. Now as we introduce new
 
 We can check the memory by `free -h` to confirm the machine has more than 95GB available memory.
 
-Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory.
+Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory. (It will release about 30GB if you originally set it to 15000)
 
 ```sudo sysctl -w vm.nr_hugepages=0```
 
