@@ -86,7 +86,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #0abb629f892bd04bcdad985f0940288b0470d10c
+- prover-node-release #c05f36bd940df7b9dfe4837f3ecaef5c1db79c39
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
@@ -120,21 +120,28 @@ This service must be run in parallel to the prover node, so running the service 
 - `mongodb_uri` - The URI of the MongoDB instance to connect to. By default it is "mongodb://localhost:27017". You do not need change it if you start the prover node with `docker compose up` and use default `docker-compose.yml`.
 - `private_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
 
-### HugePages Configuration
+### HugePages Configuration 
 
-It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
+(No need in this version)
 
-Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.
+~~It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.~~
 
-For a machine running a single prover node, the value should be set to ~15000. This is done with the following command.
+~~Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.~~
 
-`sysctl -w vm.nr_hugepages=15000`
+~~For a machine running a single prover node, the value should be set to 15000. This is done with the following command.~~
 
-Make sure you use `grep Huge /proc/meminfo` to check it is changed and then start docker containers.
+~~`sysctl -w vm.nr_hugepages=15000`~~
 
-Please note the above will only set the current running system huge pages. It will be reset after the machine restarted. If you want to keep it after restarting, add the following entry to the `/etc/sysctl.conf` file:
+~~Make sure you use `grep Huge /proc/meminfo` to check it is changed and then start docker containers.~~
 
-`vm.nr_hugepages=15000`
+~~Please note the above will only set the current running system huge pages. It will be reset after the machine restarted. If you want to keep it after restarting, add the following entry to the `/etc/sysctl.conf` file:~~
+
+~~`vm.nr_hugepages=15000`~~
+
+### Memory Requirements
+
+We support new continuation feature from this version and remove the huge page memory usage so we have minimum memory requirements to run prover.
+The minimum requirement of the available to run prover is **95 GB**.
 
 ### GPU Configuration
 
@@ -302,13 +309,15 @@ Private key should be UNIQUE for each node.
 
 Ensure the `dry_run_config.json` file is updated with the correct server URL and MongoDB URI for each node.
 
-#### HugePages Configuration
+#### HugePages Configuration (No need in current version)
 
-Running multiple nodes requires HugePages to be expanded to accommodate the memory requirements of each node.
+~~Running multiple nodes requires HugePages to be expanded to accommodate the memory requirements of each node.~~
 
-Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepages` is set to the correct value on the **HOST MACHINE**.
+~~Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepages` is set to the correct value on the **HOST MACHINE**.~~
 
-`sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.
+~~`sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.~~
+
+Each prover docker need 95GB memory to run.
 
 #### Docker volume and container names
 
@@ -359,6 +368,18 @@ Check docker container status by `docker ps -a`.
 
 Prune the containers with `docker container prune`. Please note this will remove all docker containers, so if you have your own container not related to prover docker, need manually remove container.
 
+### Remove the huge page memory to free your memory
+
+In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run. 
+
+We can check the memory by `free -h` to confirm the machine has more than 95GB available memory.
+
+Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory.
+
+```sudo sysctl -w vm.nr_hugepages=0```
+
+And you can use command `grep Huge /proc/meminfo` to check currently huge page settings to confirm it is 0.
+
 ### Pull Latest Changes
 
 Pull the latest changes from the repository with `git pull`.
@@ -390,7 +411,7 @@ Then follow the [Quick Start](#quick-start) steps to start.
 1.  If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again.
     If it still failed, please check the logs following [Logs](#logs) section
 
-2.  If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the huge page memory had been set correctly, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
+2.  If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the avaliable memory is large enough, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
 
 3.  If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. It can be reset by:\
     `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
