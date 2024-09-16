@@ -122,26 +122,24 @@ This service must be run in parallel to the prover node, so running the service 
 
 ### HugePages Configuration
 
-(No need in this version)
+It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.
 
-~~It is required to set the hugepages on the host machine to the correct value. This is done by setting the `vm.nr_hugepages` kernel parameter.~~
+Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.
 
-~~Use `grep Huge /proc/meminfo` to check currently huge page settings. HugePages_Total must be more than 15000 to support one prover node.~~
+For a machine running a single prover node, the value should be set to 15000. This is done with the following command.
 
-~~For a machine running a single prover node, the value should be set to 15000. This is done with the following command.~~
+`sysctl -w vm.nr_hugepages=15000`
 
-~~`sysctl -w vm.nr_hugepages=15000`~~
+Make sure you use `grep Huge /proc/meminfo` to check it is changed and then start docker containers.
 
-~~Make sure you use `grep Huge /proc/meminfo` to check it is changed and then start docker containers.~~
+Please note the above will only set the current running system huge pages. It will be reset after the machine restarted. If you want to keep it after restarting, add the following entry to the `/etc/sysctl.conf` file:
 
-~~Please note the above will only set the current running system huge pages. It will be reset after the machine restarted. If you want to keep it after restarting, add the following entry to the `/etc/sysctl.conf` file:~~
-
-~~`vm.nr_hugepages=15000`~~
+`vm.nr_hugepages=15000`
 
 ### Memory Requirements
 
-We support new continuation feature from this version and remove the huge page memory usage so we have minimum memory requirements to run prover.
-The minimum requirement of the available to run prover is **95 GB**.
+We support new continuation feature from this version.
+The minimum requirement of the available to run prover is **58 GB** after with HugePages_Total 15000, which is about 88 GB.
 
 ### GPU Configuration
 
@@ -311,11 +309,11 @@ Ensure the `dry_run_config.json` file is updated with the correct server URL and
 
 #### HugePages Configuration (No need in current version)
 
-~~Running multiple nodes requires HugePages to be expanded to accommodate the memory requirements of each node.~~
+Running multiple nodes requires HugePages to be expanded to accommodate the memory requirements of each node.
 
-~~Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepages` is set to the correct value on the **HOST MACHINE**.~~
+Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepages` is set to the correct value on the **HOST MACHINE**.
 
-~~`sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.~~
+`sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.
 
 Each prover docker need 95GB memory to run.
 
@@ -368,17 +366,7 @@ Check docker container status by `docker ps -a`.
 
 Prune the containers with `docker container prune`. Please note this will remove all docker containers, so if you have your own container not related to prover docker, need manually remove container.
 
-### Remove the huge page memory to free your memory
-
-In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run.
-
-We can check the memory by `free -h` to confirm the machine has more than 95GB available memory.
-
-Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory. (It will release about 30GB if you originally set it to 15000)
-
-`sudo sysctl -w vm.nr_hugepages=0`
-
-And you can use command `grep Huge /proc/meminfo` to check currently huge page settings to confirm it is 0.
+Now as we introduce new continuation feature, the prover docker need 58 GB memory to run besides the 15000 huge pages. So totally the machine may need 88 GB memory minimum.
 
 ### Pull Latest Changes
 
