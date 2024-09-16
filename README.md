@@ -405,3 +405,5 @@ Then follow the [Quick Start](#quick-start) steps to start.
     `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
     `sudo systemctl restart docker` (Ubuntu)\
     and see whether it fix the issue or not.
+
+4. If prover running failed by some request "Timeout" reason, it maybe some network issue so just try to stop and start docker container again. `docker compose down` and `docker compose up`
