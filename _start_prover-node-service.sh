@@ -5,10 +5,24 @@ mem_available_gb=$((mem_available / 1024 / 1024))
 echo "----------Available memory: $mem_available_gb GB---------------------------"
 
 # Set your required memory threshold here (in GB)
-required_memory=95 
+required_memory=58
 
 if [ "$mem_available_gb" -lt "$required_memory" ]; then
     echo "Error: Available memory ($mem_available_gb GB) is less than the required $required_memory GB."
+    exit 1
+fi
+
+# Huge Pages
+echo 'Checking Huge Pages configuration:'
+cat /proc/meminfo | grep Huge
+ls -lh /dev/hugepages
+
+# Check HugePages_Free
+hugepages_free=$(cat /proc/meminfo | grep -i hugepages_free | awk '{print $2}')
+echo "HugePages_Free: $hugepages_free"
+
+if [ $hugepages_free -lt 15000 ]; then
+    echo "Error: HugePages_Free ($hugepages_free) is less than 15000. Please make sure HugePages is configured correctly on the host machine. Requires 15000 HugePages configured per node."
     exit 1
 fi
 

@@ -86,7 +86,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #c05f36bd940df7b9dfe4837f3ecaef5c1db79c39
+- prover-node-release #aa0462593cbc04cfba58c0df6d103cd263bc0a6a
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
@@ -120,7 +120,7 @@ This service must be run in parallel to the prover node, so running the service 
 - `mongodb_uri` - The URI of the MongoDB instance to connect to. By default it is "mongodb://localhost:27017". You do not need change it if you start the prover node with `docker compose up` and use default `docker-compose.yml`.
 - `private_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
 
-### HugePages Configuration 
+### HugePages Configuration
 
 (No need in this version)
 
@@ -370,13 +370,13 @@ Prune the containers with `docker container prune`. Please note this will remove
 
 ### Remove the huge page memory to free your memory
 
-In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run. 
+In previous version we require 15000 pages of huge page. Now as we introduce new continuation feature we do not use huge pages in this version but the prover docker need 95 GB memory to run.
 
 We can check the memory by `free -h` to confirm the machine has more than 95GB available memory.
 
 Thus if you want to release the memory which take by huge page, you can run the follow command to free huge page memory. (It will release about 30GB if you originally set it to 15000)
 
-```sudo sysctl -w vm.nr_hugepages=0```
+`sudo sysctl -w vm.nr_hugepages=0`
 
 And you can use command `grep Huge /proc/meminfo` to check currently huge page settings to confirm it is 0.
 
@@ -417,4 +417,3 @@ Then follow the [Quick Start](#quick-start) steps to start.
     `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
     `sudo systemctl restart docker` (Ubuntu)\
     and see whether it fix the issue or not.
-
