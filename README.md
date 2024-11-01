@@ -86,7 +86,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #aa0462593cbc04cfba58c0df6d103cd263bc0a6a
+- prover-node-release #9af82f30d10bc572ef8ef492392fa6a01f3d7686
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
@@ -406,4 +406,4 @@ Then follow the [Quick Start](#quick-start) steps to start.
     `sudo systemctl restart docker` (Ubuntu)\
     and see whether it fix the issue or not.
 
-4. If prover running failed by some request "Timeout" reason, it maybe some network issue so just try to stop and start docker container again. `docker compose down` and `docker compose up`
+4.  If prover running failed by some request "Timeout" reason, it maybe some network issue so just try to stop and start docker container again. `docker compose down` and `docker compose up`
