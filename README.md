@@ -13,6 +13,7 @@ This is the docker container for the prover node. This container is responsible 
   - [Dry Run Service Configuration](#dry-run-service-configuration)
   - [HugePages Configuration](#hugepages-configuration)
   - [GPU Configuration](#gpu-configuration)
+  - [MongoDB](#mongodb-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
 - [Quick Start](#quick-start)
 - [Logs](#logs)
@@ -155,6 +156,8 @@ Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VI
 
 MongoDB will work "out-of-the-box", however, if you need to do something specific, please refer the following section.
 
+Note: If initializing from a checkpoint, it may take time to perform the initial restore.
+
 ### Default Settings/Config
 
 For most use cases, the default options should be sufficient.
@@ -165,14 +168,78 @@ Network mode is set to `host` to allow the prover node to connect to the mongodb
 
 If you are unsure about modifying or customizing changes, refer to the section below.
 
+### Initializing from Checkpoint
+
+Using our custom `mongo` image, we need to initialize the database and restore from a checkpoint.
+
+If you run the mongodb service with default options, there is no need to configure anything as the checkpointed database will be initialized and restored automatically.
+
+#### Network Mode: Host
+
+If you are using `network_mode: host`, some consideration should be made for the initialization process.
+
+Mongodb initializes the database by spawning a temporary mongodb process which will require binding to a port.
+
+Ensure the port is not in use by another process, otherwise the initialization will fail.
+
+We have a custom ENV variable `MONGO_INITDB_PORT` which you can set in the `docker-compose.yml` file to specify the port for the initialization process.
+
+This does not affect the port the mongodb instance will run on, only the port used for initialization.
+
+```yaml
+services:
+  mongodb:
+    network_mode: "host"
+    environment:
+      # Set this port if 27017 is already used by another service/mongodb instance
+      # Mostly useful if using network_mode: "host", as the port will be shared.
+      - MONGO_INITDB_PORT=27017
+```
+
+#### Updating the Checkpoint Image
+
+For future updates, your mongodb data may not be up to date with the latest data if it has been offline for a while.
+
+The checkpoint image is updated periodically via the docker images `tag` in the `docker-compose.yml` file.
+
+Note that pulling the latest image does not automatically update the data as the data is stored in the volume.
+
+If your node has been online consistently, you may not need to update the checkpoint data.
+
+If you need to update the database/checkpoint data, the simplest steps are to stop the containers, prune/remove the volumes, and then start the containers again.
+
+```bash
+docker compose down
+# OR
+docker container stop <container-name>
+
+# Prune unused containers
+docker container ls
+
+docker container prune
+
+# Prune unused volumes
+docker volume ls
+
+docker volume prune
+# AND/OR
+docker volume rm <volume-name> # Useful for named volume such as prover-node-docker_mongodb_data etc.
+
+# Restart the containers
+docker compose up
+# OR
+docker compose -p <project-name> up
+```
+
 ### Customising the MongoDB docker container
 
 <details>
   <summary>View customization details</summary>
-  
-  #### The `mongo` docker image
 
-For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+#### The `mongo` docker image
+
+For our `mongo` DB docker instance we are using a wrapped `mongo` image with some extra data and initialization scripts.
+It is based off `mongo:7.0`, [github link](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile). The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
 
 #### The `mongo` daemon config file
 
@@ -182,7 +249,8 @@ Even though we use a pre-build `mongo` image, this doesn't limit our customisabi
 
 ##### DB Storage
 
-to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+Our db storage is mounted using the `mongodb_data` volume.
+If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
 
 ```yaml
 services:
@@ -210,9 +278,14 @@ Specify the port by adding `--port <PORT>` to the `command` field in the `docker
 ```yaml
 services:
   mongodb:
-    command: --config /data/configdb/mongod.conf --port 8099
+    command: --port 8099
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:8099/test --quiet
+      test: |
+        mongosh --port 8099 --quiet --eval '
+          const ping = db.adminCommand({ ping: 1 }).ok;
+          const init = db.init_status.findOne({ "_id": "init" }) != null;
+          if (ping && init) { quit(0) } else { quit(1) }
+        '
 ```
 
 ##### Logging and log rotation

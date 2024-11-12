@@ -4,7 +4,7 @@ services:
     attach: false
     network_mode: "host"
     environment:
-      # Set this port if using 27017 is already used by another service/mongodb instance
+      # Set this port if 27017 is already used by another service/mongodb instance
       # Mostly useful if using network_mode: "host", as the port will be shared.
       - MONGO_INITDB_PORT=27017
     # ports:
@@ -24,7 +24,7 @@ services:
           const init = db.init_status.findOne({ "_id": "init" }) != null;
           if (ping && init) { quit(0) } else { quit(1) }
         '
-      interval: 5s
+      interval: 30s
       start_period: 20s
       timeout: 10s
       retries: 10
