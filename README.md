@@ -168,7 +168,7 @@ Network mode is set to `host` to allow the prover node to connect to the mongodb
 
 If you are unsure about modifying or customizing changes, refer to the section below.
 
-### Initializing from Checkpoint
+### Initializing a new MongoDB instance
 
 Using our custom `mongo` image, we need to initialize the database and restore from a checkpoint.
 
