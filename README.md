@@ -275,6 +275,15 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 We require our Params FTP Server to be running before starting the prover node. The prover node must copy the parameters from the FTP server to it's own volume to operate correctly.
 
+`bash scripts/upgrade.sh` is required to run the first time you pull the repository or update the prover node.
+
+To start the prover node, run:
+
+`bash scripts/start.sh`
+
+<details>
+  <summary>Quick Start Details</summary>
+
 ### Params FTP Server
 
 Start the FTP server with `docker compose -f ftp-docker-compose.yml up`.
@@ -283,7 +292,9 @@ The default port is `21` and the default user is `ftpuser` with password `ftppas
 
 ### Prover Node
 
-Make sure you had built the image via `bash build_image.sh`
+The docker image is built locally, and requires building with:
+
+`DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .`
 
 Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
 
@@ -292,6 +303,8 @@ Once the Params FTP server is running, you can start the prover node.
 Start all services at once with the command `docker compose up`. However it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
 
 `docker compose up` will run the base services in order of mongodb, dry-run-service, prover-node service.
+
+</details>
 
 ## Multiple Prover Nodes
 
@@ -396,13 +409,13 @@ sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename
 
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
 
-Stop all containers with `docker compose down`.
+Stop all containers with `docker compose down` or `Ctrl+C`.
+
+OR
 
 Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id>`.
 
 Check docker container status by `docker ps -a`.
-
-Prune the containers with `docker container prune`. Please note this will remove all docker containers, so if you have your own container not related to prover docker, need manually remove container.
 
 Now as we introduce new continuation feature, the prover docker need 58 GB memory to run besides the 15000 huge pages. So totally the machine may need 88 GB memory minimum.
 
@@ -414,25 +427,18 @@ You may need to stash changes if you have modified the `docker-compose.yml` file
 
 Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, ensure the changes are applied again.
 
-### Delete Workspace and Mongodb Volumes
+### Run Upgrade Script
 
-Find the correct volume you would like to delete with `docker volume ls`.
+Run the upgrade script with `bash scripts/upgrade.sh`.
 
-Delete the prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume". So by default do `docker volume rm prover-node-docker_workspace-volume`.
+You should only need to run this each time the prover node is updated.
 
-Delete the mongodb data volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_mongodb_data". So by default do `docker volume rm prover-node-docker_mongodb_data`.
-
-### Rebuild Docker Image
-
-Remove the old docker image with `docker image ls` to check the image name and then `docker image rm zkwasm:latest`
-
-Rebuild the docker image with `bash build_image.sh`.
+### Start the Prover Node
 
 Then follow the [Quick Start](#quick-start) steps to start.
 
-`docker compose -f ftp-docker-compose.yml up`
-
-`docker compose up`
+If you have already run `scripts/upgrade.sh` and want to start the prover node, you can just run
+`bash scripts/start.sh`
 
 ## Common issues
 
