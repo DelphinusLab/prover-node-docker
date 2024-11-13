@@ -275,6 +275,8 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 We require our Params FTP Server to be running before starting the prover node. The prover node must copy the parameters from the FTP server to it's own volume to operate correctly.
 
+Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
+
 `bash scripts/upgrade.sh` is required to run the first time you pull the repository or update the prover node.
 
 To start the prover node, run:
@@ -295,8 +297,6 @@ The default port is `21` and the default user is `ftpuser` with password `ftppas
 The docker image is built locally, and requires building with:
 
 `DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .`
-
-Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
 
 Once the Params FTP server is running, you can start the prover node.
 
