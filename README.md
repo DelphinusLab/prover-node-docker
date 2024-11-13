@@ -13,6 +13,7 @@ This is the docker container for the prover node. This container is responsible 
   - [Dry Run Service Configuration](#dry-run-service-configuration)
   - [HugePages Configuration](#hugepages-configuration)
   - [GPU Configuration](#gpu-configuration)
+  - [MongoDB](#mongodb-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
 - [Quick Start](#quick-start)
 - [Logs](#logs)
@@ -149,30 +150,59 @@ The starting command for the container will use `CUDA_VISIBLE_DEVICES=0` to spec
 
 You may also change the `device_ids` field in the `docker-compose.yml` file to specify the GPU's to use. Note that in the container the GPU indexing starts at 0.
 
-Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
-
 ## MongoDB Configuration
 
 MongoDB will work "out-of-the-box", however, if you need to do something specific, please refer the following section.
+
+Note: If initializing from a checkpoint, it may take time to perform the initial restore.
 
 ### Default Settings/Config
 
 For most use cases, the default options should be sufficient.
 
-The mongodb instance will run on port `27017` and the data will be stored in the `./mongo` directory.
+The mongodb instance will run on port `27017` and the data will be stored in the `mongodb_data` volume.
 
 Network mode is set to `host` to allow the prover node to connect to the mongodb instance via localhost, however if you prefer the port mapping method, you can change the port in the `docker-compose.yml` file.
 
 If you are unsure about modifying or customizing changes, refer to the section below.
 
+### Initializing a new MongoDB instance
+
+Using our custom `mongo` image, we need to initialize the database and restore from a checkpoint.
+
+If you run the mongodb service with default options, there is no need to configure anything as the checkpointed database will be initialized and restored automatically.
+
+#### Using Custom MongoDB Port
+
+If you are using a custom port (non 27017), some consideration should be made for the initialization process.
+
+Mongodb initializes the database by spawning a temporary mongodb process which will require binding to a port.
+
+Ensure the port is not in use by another process, otherwise the initialization will fail.
+
+We have a custom ENV variable `MONGO_INITDB_PORT` which you can set in the `docker-compose.yml` file to specify the port for the initialization process.
+
+This does not affect the port the mongodb instance will run on, only the port used for initialization.
+
+```yaml
+services:
+  mongodb:
+    network_mode: "host"
+    environment:
+      # Set this port if 27017 is already used by another service/mongodb instance
+      # Mostly useful if using network_mode: "host", as the port will be shared.
+      - MONGO_INITDB_PORT=27017
+```
+
 ### Customising the MongoDB docker container
 
 <details>
   <summary>View customization details</summary>
-  
-  #### The `mongo` docker image
 
-For our `mongo` DB docker instance we are using the official docker image provided by `mongo` on their docker hub page, [here](https://hub.docker.com/_/mongo/), `mongo:latest`. They link to the `Dockerfile` they used to build the image, at the time of writing, [this](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile) was the latest. It's to have a glance at this if you want to customise our setup. The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
+#### The `mongo` docker image
+
+For our `mongo` DB docker instance we are using a wrapped `mongo` image with some extra data and initialization scripts.
+It is based off `mongo:7.0`, [github link](https://github.com/docker-library/mongo/blob/ea20b1f96f8a64f988bdcc03bb7cb234377c220c/7.0/Dockerfile). The most essential thing to note is the **volumes,** which are `/data/db` and `/data/configdb`; any files you wish to mount should be mapped into these directories. Another critical piece of info is the **exposed port**, which is `27017`; this is the default port for `mongod`, if you want to change the port you have to bind it to another port in the `docker-compose.yml` file.
 
 #### The `mongo` daemon config file
 
@@ -182,7 +212,8 @@ Even though we use a pre-build `mongo` image, this doesn't limit our customisabi
 
 ##### DB Storage
 
-to note is that our db storage is mounted locally under `./mongo` directory. The path is specified in the `mongod.conf` and the mount point is specified in `docker-compose.yml`. If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
+Our db storage is mounted using the `mongodb_data` volume.
+If you want to change the where the storage is located on the host machine, you only need to change the mount bind, for example to change the storage path to `/home/user/anotherdb`.
 
 ```yaml
 services:
@@ -210,9 +241,14 @@ Specify the port by adding `--port <PORT>` to the `command` field in the `docker
 ```yaml
 services:
   mongodb:
-    command: --config /data/configdb/mongod.conf --port 8099
+    command: --port 8099
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:8099/test --quiet
+      test: |
+        mongosh --port 8099 --quiet --eval '
+          const ping = db.adminCommand({ ping: 1 }).ok;
+          const init = db.init_status.findOne({ "_id": "init" }) != null;
+          if (ping && init) { quit(0) } else { quit(1) }
+        '
 ```
 
 ##### Logging and log rotation
@@ -237,6 +273,17 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 We require our Params FTP Server to be running before starting the prover node. The prover node must copy the parameters from the FTP server to it's own volume to operate correctly.
 
+Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
+
+`bash scripts/upgrade.sh` is required to run the first time you pull the repository or update the prover node.
+
+To start the prover node, run:
+
+`bash scripts/start.sh`
+
+<details>
+  <summary>Quick Start Details</summary>
+
 ### Params FTP Server
 
 Start the FTP server with `docker compose -f ftp-docker-compose.yml up`.
@@ -245,15 +292,17 @@ The default port is `21` and the default user is `ftpuser` with password `ftppas
 
 ### Prover Node
 
-Make sure you had built the image via `bash build_image.sh`
+The docker image is built locally, and requires building with:
 
-Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
+`DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .`
 
 Once the Params FTP server is running, you can start the prover node.
 
 Start all services at once with the command `docker compose up`. However it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
 
 `docker compose up` will run the base services in order of mongodb, dry-run-service, prover-node service.
+
+</details>
 
 ## Multiple Prover Nodes
 
@@ -294,7 +343,12 @@ Ensure the MongoDB instance is unique for each node. This is done by modifying t
     ```yaml
     command: --config /data/configdb/mongod.conf --port XXXX
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:XXXX/test --quiet
+      test: |
+        mongosh --port 8099 --quiet --eval '
+          const ping = db.adminCommand({ ping: 1 }).ok;
+          const init = db.init_status.findOne({ "_id": "init" }) != null;
+          if (ping && init) { quit(0) } else { quit(1) }
+        '
     ```
 
 Ensure the `dry_run_config.json` file is updated with the correct MongoDB URI for each node.
@@ -358,13 +412,13 @@ sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename
 
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
 
-Stop all containers with `docker compose down`.
+Stop all containers with `docker compose down` or `Ctrl+C`.
+
+OR
 
 Manually stop the containers with `docker container ls` and then `docker stop <container-name-or-id>`.
 
 Check docker container status by `docker ps -a`.
-
-Prune the containers with `docker container prune`. Please note this will remove all docker containers, so if you have your own container not related to prover docker, need manually remove container.
 
 Now as we introduce new continuation feature, the prover docker need 58 GB memory to run besides the 15000 huge pages. So totally the machine may need 88 GB memory minimum.
 
@@ -376,23 +430,22 @@ You may need to stash changes if you have modified the `docker-compose.yml` file
 
 Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, ensure the changes are applied again.
 
-### Delete Volume
+### Run Upgrade Script
 
-Find the correct volume you would like to delete with `docker volume ls`.
+Run the upgrade script with `bash scripts/upgrade.sh`.
 
-Delete the prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume". So by default do `docker volume rm prover-node-docker_workspace-volume`.
+You should only need to run this each time the prover node is updated.
 
-### Rebuild Docker Image
+As we changed to use our custom mongodb image with extra data at volume `mongodb_data`, so we do not need the legacy mapped mongo directory.
 
-Remove the old docker image with `docker image ls` to check the image name and then `docker image rm zkwasm:latest`
+So if you want to save your disk space you can remove the mongo directory under this repo's dir.
 
-Rebuild the docker image with `bash build_image.sh`.
+### Start the Prover Node
 
 Then follow the [Quick Start](#quick-start) steps to start.
 
-`docker compose -f ftp-docker-compose.yml up`
-
-`docker compose up`
+If you have already run `scripts/upgrade.sh` and want to start the prover node, you can just run
+`bash scripts/start.sh`
 
 ## Common issues
 
