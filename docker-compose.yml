@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: rhaoio/rhaoio-mongo-merkle:6731bb3e3b41f7f507920699
+    image: zkwasm/zkwasm-mongo-merkle:6733eb6123f3dcdd7f58e0f9
     attach: false
     network_mode: "host"
     environment:
