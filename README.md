@@ -150,8 +150,6 @@ The starting command for the container will use `CUDA_VISIBLE_DEVICES=0` to spec
 
 You may also change the `device_ids` field in the `docker-compose.yml` file to specify the GPU's to use. Note that in the container the GPU indexing starts at 0.
 
-Also ensure the `command` field in `docker-compose.yml` is modified for `CUDA_VISIBLE_DEVICES` to match the GPU you would like to use.
-
 ## MongoDB Configuration
 
 MongoDB will work "out-of-the-box", however, if you need to do something specific, please refer the following section.
@@ -162,7 +160,7 @@ Note: If initializing from a checkpoint, it may take time to perform the initial
 
 For most use cases, the default options should be sufficient.
 
-The mongodb instance will run on port `27017` and the data will be stored in the `./mongo` directory.
+The mongodb instance will run on port `27017` and the data will be stored in the `mongodb_data` volume.
 
 Network mode is set to `host` to allow the prover node to connect to the mongodb instance via localhost, however if you prefer the port mapping method, you can change the port in the `docker-compose.yml` file.
 
@@ -345,7 +343,12 @@ Ensure the MongoDB instance is unique for each node. This is done by modifying t
     ```yaml
     command: --config /data/configdb/mongod.conf --port XXXX
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:XXXX/test --quiet
+      test: |
+        mongosh --port 8099 --quiet --eval '
+          const ping = db.adminCommand({ ping: 1 }).ok;
+          const init = db.init_status.findOne({ "_id": "init" }) != null;
+          if (ping && init) { quit(0) } else { quit(1) }
+        '
     ```
 
 Ensure the `dry_run_config.json` file is updated with the correct MongoDB URI for each node.
@@ -432,6 +435,10 @@ Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, 
 Run the upgrade script with `bash scripts/upgrade.sh`.
 
 You should only need to run this each time the prover node is updated.
+
+As we changed to use our custom mongodb image with extra data at volume `mongodb_data`, so we do not need the legacy mapped mongo directory.
+
+So if you want to save your disk space you can remove the mongo directory under this repo's dir.
 
 ### Start the Prover Node
 
