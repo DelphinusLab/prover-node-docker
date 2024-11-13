@@ -27,9 +27,8 @@ services:
       interval: 30s
       start_period: 20s
       timeout: 10s
-      retries: 10
+      retries: 10000
     container_name: zkwasm-mongodb
-    restart: always
   prover-dry-run-service:
     image: zkwasm:latest
     attach: false
@@ -124,3 +123,4 @@ volumes:
   workspace-volume:
   prover-logs-volume:
   dry-run-logs-volume:
+  mongodb_data:

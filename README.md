@@ -174,9 +174,9 @@ Using our custom `mongo` image, we need to initialize the database and restore f
 
 If you run the mongodb service with default options, there is no need to configure anything as the checkpointed database will be initialized and restored automatically.
 
-#### Network Mode: Host
+#### Using Custom MongoDB Port
 
-If you are using `network_mode: host`, some consideration should be made for the initialization process.
+If you are using a custom port (non 27017), some consideration should be made for the initialization process.
 
 Mongodb initializes the database by spawning a temporary mongodb process which will require binding to a port.
 
@@ -194,41 +194,6 @@ services:
       # Set this port if 27017 is already used by another service/mongodb instance
       # Mostly useful if using network_mode: "host", as the port will be shared.
       - MONGO_INITDB_PORT=27017
-```
-
-#### Updating the Checkpoint Image
-
-For future updates, your mongodb data may not be up to date with the latest data if it has been offline for a while.
-
-The checkpoint image is updated periodically via the docker images `tag` in the `docker-compose.yml` file.
-
-Note that pulling the latest image does not automatically update the data as the data is stored in the volume.
-
-If your node has been online consistently, you may not need to update the checkpoint data.
-
-If you need to update the database/checkpoint data, the simplest steps are to stop the containers, prune/remove the volumes, and then start the containers again.
-
-```bash
-docker compose down
-# OR
-docker container stop <container-name>
-
-# Prune unused containers
-docker container ls
-
-docker container prune
-
-# Prune unused volumes
-docker volume ls
-
-docker volume prune
-# AND/OR
-docker volume rm <volume-name> # Useful for named volume such as prover-node-docker_mongodb_data etc.
-
-# Restart the containers
-docker compose up
-# OR
-docker compose -p <project-name> up
 ```
 
 ### Customising the MongoDB docker container
@@ -454,6 +419,8 @@ Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, 
 Find the correct volume you would like to delete with `docker volume ls`.
 
 Delete the prover-node workspace volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_workspace-volume". So by default do `docker volume rm prover-node-docker_workspace-volume`.
+
+Delete the mongodb data volume with `docker volume rm <volume_name>`. By default volume_name is "prover-node-docker_mongodb_data". So by default do `docker volume rm prover-node-docker_mongodb_data`.
 
 ### Rebuild Docker Image
 
