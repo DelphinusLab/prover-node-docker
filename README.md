@@ -414,7 +414,7 @@ You may need to stash changes if you have modified the `docker-compose.yml` file
 
 Similarly, if `prover_config.json` or `dry_run_config.json` have been modified, ensure the changes are applied again.
 
-### Delete Volume
+### Delete Workspace and Mongodb Volumes
 
 Find the correct volume you would like to delete with `docker volume ls`.
 
