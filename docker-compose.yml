@@ -1,8 +1,31 @@
 services:
+  zkwasm-params:
+    image: zkwasm/params
+    networks:    
+      - zkwasm-network
+    container_name: zkwasm-params
+    environment:
+      PUBLICHOST: "zkwasm-params"
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftppassword
+      FTP_USER_HOME: /home/ftpuser
+    healthcheck:
+      test: "ls -l /var/run/pure-ftpd.pid"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: 30m
+
   mongodb:
     image: mongo:latest
     attach: false
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
+    container_name: zkwasm-mongodb
     # ports:
     #   - "27017:27017"
     volumes:
@@ -20,13 +43,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    container_name: zkwasm-mongodb
     restart: always
+
   prover-dry-run-service:
     image: zkwasm:latest
     attach: false
     runtime: nvidia
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
+    container_name: zkwasm-prover-dryrun
     user: "1001:1001"
     build:
       context: .
@@ -63,12 +88,17 @@ services:
 
       RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover \
       2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$${time}.log 100M"
+  
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
-    network_mode: "host"
+    networks:    
+      - zkwasm-network
+    container_name: zkwasm-prover
     depends_on:
       prover-dry-run-service:
+        condition: service_healthy
+      zkwasm-params:
         condition: service_healthy
     deploy:
       resources:
@@ -112,6 +142,14 @@ services:
         "/bin/bash",
         "/home/zkwasm/prover-node-release/_start_prover-node-service.sh",
       ]
+
+networks:
+  zkwasm-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.66.0.0/24
+
 volumes:
   workspace-volume:
   prover-logs-volume:
