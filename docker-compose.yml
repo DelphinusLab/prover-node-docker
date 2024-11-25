@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: zkwasm/zkwasm-mongo-merkle:6733eb6123f3dcdd7f58e0f9
+    image: zkwasm/zkwasm-mongo-merkle:674032ec1a09674a49ddc107
     attach: false
     network_mode: "host"
     environment:
