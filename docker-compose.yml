@@ -35,7 +35,7 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-    command: --port 27017
+    command: --port 27017 --wiredTigerCacheSizeGB 7
     healthcheck:
       test: |
         mongosh --port 27017 --quiet --eval '
