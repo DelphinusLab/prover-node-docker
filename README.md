@@ -410,6 +410,8 @@ Manually stop ALL containers with `docker container ls` and then `docker stop <c
 
 Check docker container status by `docker ps -a`.
 
+Please note: Please manually double check and confirm the `ftp docker container` are stopped if it was started manually in old version.
+
 Now as we introduce new continuation feature, the prover docker need 58 GB memory to run besides the 15000 huge pages. So totally the machine may need 88 GB memory minimum.
 
 ### Pull Latest Changes
