@@ -172,6 +172,16 @@ Using our custom `mongo` image, we need to initialize the database and restore f
 
 If you run the mongodb service with default options, there is no need to configure anything as the checkpointed database will be initialized and restored automatically.
 
+### Developer Notes
+
+If a checkpointed database is not required (such as for certain dev environments), the mongodb image in `docker-compose.yml` can be replaced with the official `mongo` image.
+
+```yaml
+services:
+  mongodb:
+    image: mongo:7.0
+```
+
 #### Using Custom MongoDB Port
 
 If you are using a custom port (non 27017), some consideration should be made for the initialization process.
