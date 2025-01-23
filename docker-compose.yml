@@ -1,27 +1,53 @@
 services:
+  params-ftp:
+    image: zkwasm/params
+    network_mode: "host"
+    attach: false
+    # ports:
+    #   - "21:21"
+    #   - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftppassword
+      FTP_USER_HOME: /home/ftpuser
+      # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
+    healthcheck:
+      # Basic health check to ensure the FTP server is running
+      test: "ls -l /var/run/pure-ftpd.pid"
+      interval: 30s
+      timeout: 10s
+      retries: 3
   mongodb:
-    image: mongo:latest
+    image: zkwasm/zkwasm-mongo-merkle:6785eb1c7893e0306e5b07bb
     attach: false
     network_mode: "host"
+    environment:
+      # Set this port if 27017 is already used by another service/mongodb instance
+      # Mostly useful if using network_mode: "host", as the port will be shared.
+      - MONGO_INITDB_PORT=27017
     # ports:
-    #   - "27017:27017"
+    #  - "27017:27017"
     volumes:
-      - ./mongo/db:/data/db
-      - ./mongod.conf:/data/configdb/mongod.conf
+      - mongodb_data:/data/db
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
-    command: --config /data/configdb/mongod.conf
+    command: --port 27017 --wiredTigerCacheSizeGB 7
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      start_period: 5s
+      test: |
+        mongosh --port 27017 --quiet --eval '
+          const ping = db.adminCommand({ ping: 1 }).ok;
+          const init = db.init_status.findOne({ "_id": "init" }) != null;
+          if (ping && init) { quit(0) } else { quit(1) }
+        '
       interval: 30s
+      start_period: 20s
       timeout: 10s
-      retries: 3
+      retries: 10000
     container_name: zkwasm-mongodb
-    restart: always
   prover-dry-run-service:
     image: zkwasm:latest
     attach: false
@@ -70,6 +96,8 @@ services:
     depends_on:
       prover-dry-run-service:
         condition: service_healthy
+      params-ftp:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -116,3 +144,4 @@ volumes:
   workspace-volume:
   prover-logs-volume:
   dry-run-logs-volume:
+  mongodb_data:
