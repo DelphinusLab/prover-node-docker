@@ -5,7 +5,7 @@ mem_available_gb=$((mem_available / 1024 / 1024))
 echo "----------Available memory: $mem_available_gb GB---------------------------"
 
 # Set your required memory threshold here (in GB)
-required_memory=70
+required_memory=80
 
 if [ "$mem_available_gb" -lt "$required_memory" ]; then
     echo "Error: Available memory ($mem_available_gb GB) is less than the required $required_memory GB."
