@@ -446,7 +446,10 @@ So if you want to save your disk space you can remove the mongo directory under 
 
 ### Start the Prover Node
 Just run
+
 `bash scripts/start.sh`
+
+First time starting after upgrading need download the new merkle db from docker hub so it will take times based on download speed.
 
 ## Common issues
 
