@@ -19,7 +19,7 @@ services:
       timeout: 10s
       retries: 3
   mongodb:
-    image: zkwasm/zkwasm-mongo-merkle:6785eb1c7893e0306e5b07bb
+    image: zkwasm/zkwasm-mongo-merkle:6792da2e7893e0306e5b4efa
     attach: false
     network_mode: "host"
     environment:
