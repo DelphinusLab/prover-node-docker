@@ -371,7 +371,7 @@ Each prover-node requires roughly 15000 hugepages, so ensure the `vm.nr_hugepage
 
 `sudo sysctl -w vm.nr_hugepages=30000` for two nodes, `45000` for three nodes, etc.
 
-Each prover docker need 95GB memory to run.
+Each prover docker need 120GB memory to run.
 
 #### Docker volume and container names
 
@@ -424,7 +424,7 @@ Check docker container status by `docker ps -a`.
 
 Please note: Please manually double check and confirm the `ftp docker container` are stopped if it was started manually in old version.
 
-Now as we introduce new continuation feature, the prover docker need 58 GB memory to run besides the 15000 huge pages. So totally the machine may need 88 GB memory minimum.
+Now as we introduce new continuation and auto feature, the prover docker need 80 GB memory to run besides the 15000 huge pages. So totally the machine may need 120 GB memory.
 
 ### Pull Latest Changes
 
