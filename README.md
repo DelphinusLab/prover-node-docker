@@ -283,7 +283,9 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
 
-`bash scripts/upgrade.sh` is required to run the first time you pull the repository or update the prover node.
+`bash scripts/stop.sh` can be run to stop the prover docker services which had been run. Better run `docker ps -a` to confirm all the related services are stopped.
+
+`bash scripts/upgrade.sh` is required to run every time you want to upgrade the prover node to new version. (It will clean local db so if you do not want to upgrade the prover node or clean current env and rebuild docker do not use it)
 
 To start the prover node, run:
 
@@ -443,22 +445,18 @@ As we changed to use our custom mongodb image with extra data at volume `mongodb
 So if you want to save your disk space you can remove the mongo directory under this repo's dir.
 
 ### Start the Prover Node
-
-Then follow the [Quick Start](#quick-start) steps to start.
-
-If you have already run `scripts/upgrade.sh` and want to start the prover node, you can just run
+Just run
 `bash scripts/start.sh`
 
 ## Common issues
 
-1.  If you find the `docker compose up` failed, please do `docker volume rm prover-node-docker_workspace-volume` again and then try `docker compose up` again.
+1.  If you find the `bash scripts/start.sh` failed, please check the error to see wether it related to machine environement. If still cannot get the reason, you can do `docker volume rm prover-node-docker_workspace-volume` and `bash scripts/start.sh` again to try.
     If it still failed, please check the logs following [Logs](#logs) section
 
-2.  If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the avaliable memory is large enough, you can stop the services by `docker compose down` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `docker compose up` to see whether it fix the issue or not.
+2.  If prover running failed by "memory allocation of xxxx failed" but you had checked and confirmed the avaliable memory is large enough, you can stop the services by `bash scripts/stop.sh` and do `docker volume rm prover-node-docker_workspace-volume` and then start the services by `bash scripts/start.sh` to see whether it fix the issue or not.
 
 3.  If prover running failed by something related to "Cuda Error", which indicate the docker cannot find cuda or nvidia device, you can try to check `/etc/docker/daemon.json` whether it is correctly set the nvidia runtime. It can be reset by:\
     `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
     `sudo systemctl restart docker` (Ubuntu)\
-    and see whether it fix the issue or not.
+    and then stop and start the service again by `bash scripts/stop.sh` and `bash scripts/start.sh` see whether it fix the issue or not.
 
-4.  If prover running failed by some request "Timeout" reason, it maybe some network issue so just try to stop and start docker container again. `docker compose down` and `docker compose up`
