@@ -412,6 +412,8 @@ sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename
 
 ## Upgrading Prover Node
 
+### Stop Prover Node
+
 Upgrading the prover node requires rebuilding the docker image with the new prover node binary, and clearing previously stored data.
 
 Stop all containers with `docker compose down`, `Ctrl+C` or `bash scripts/stop.sh` if using the default project name.
