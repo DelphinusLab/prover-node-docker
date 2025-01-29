@@ -285,11 +285,15 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 
 `bash scripts/stop.sh` can be run to stop the prover docker services which had been run. Better run `docker ps -a` to confirm all the related services are stopped.
 
-`bash scripts/upgrade.sh` is required to run every time you want to upgrade the prover node to new version. (It will clean local db so if you do not want to upgrade the prover node or clean current env and rebuild docker do not use it)
+`bash scripts/upgrade.sh` is required to run every time you want to upgrade the prover node to new version.
 
 To start the prover node, run:
 
 `bash scripts/start.sh`
+
+To do a full clean start with new db, you can run:
+
+`bash scripts/upgrade_full_clean.sh`
 
 <details>
   <summary>Quick Start Details</summary>
@@ -447,6 +451,7 @@ As we changed to use our custom mongodb image with extra data at volume `mongodb
 So if you want to save your disk space you can remove the mongo directory under this repo's dir.
 
 ### Start the Prover Node
+
 Just run
 
 `bash scripts/start.sh`
@@ -464,4 +469,3 @@ First time starting after upgrading need download the new merkle db from docker 
     `sudo nvidia-ctk runtime configure --runtime=docker --set-as-default`\
     `sudo systemctl restart docker` (Ubuntu)\
     and then stop and start the service again by `bash scripts/stop.sh` and `bash scripts/start.sh` see whether it fix the issue or not.
-
