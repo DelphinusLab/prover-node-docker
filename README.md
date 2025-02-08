@@ -457,6 +457,7 @@ Just run
 `bash scripts/start.sh`
 
 First time starting after upgrading need download the new merkle db from docker hub so it will take times based on download speed.
+Also it need load 15GB checkpoint merkle db into database so it may take time for the first starting after upgrading.
 
 ## Common issues
 
