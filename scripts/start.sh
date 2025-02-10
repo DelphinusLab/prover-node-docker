@@ -9,7 +9,7 @@ wait_for_service() {
     echo "Waiting for $service_name to be healthy..."
     while [ "$(docker inspect --format='{{.State.Health.Status}}' ${service_name})" != "healthy" ]; do
         echo "Waiting for $service_name to be healthy..."
-        sleep 1
+        sleep 5
     done
 }
 
