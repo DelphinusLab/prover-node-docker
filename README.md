@@ -399,6 +399,17 @@ Then run `docker logs -f <service-name>`
 
 Where `service-name` is the name of the SERVICE named in t he docker compose file (mongodb, prover-node etc.)
 
+Example:
+
+Prover node logs
+```
+docker compose logs -f prover-node --tail 100
+```
+Prover dry run logs
+```
+docker compose logs -f prover-dry-run-service --tail 100
+```
+
 If you need to check the static logs of the `prover-dry-run-service`, then please navigate to the corresponding logs volume and view from there.
 
 By default, you can run the following command to list the log files stored and then select one to view the contents.
