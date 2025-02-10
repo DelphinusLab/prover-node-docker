@@ -1,2 +1,2 @@
 # Start prover node services
-docker compose up
+docker compose up -d

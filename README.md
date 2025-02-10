@@ -414,6 +414,22 @@ sudo ls /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/_data -lh
 sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename.log]
 ```
 
+### Prover node logs
+
+```
+docker compose logs -f prover-node --tail 100
+```
+
+### Prover dry run logs
+
+```
+docker compose logs -f prover-dry-run-service --tail 100
+```
+
+Note
+> --tail = Number of lines to show from the end of the logs for each container
+
+
 ## Upgrading Prover Node
 
 ### Stop Prover Node
