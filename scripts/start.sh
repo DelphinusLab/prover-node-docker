@@ -25,8 +25,8 @@ show_logs_temporarily() {
     kill $log_pid
 }
 
-# Start services in order
-show_logs_temporarily mongodb
+# Start services in order (#container name)
+show_logs_temporarily zkwasm-mongodb
 
 # Finally, attach to other services
 echo "Now attaching logs for prover dry-run service..."
