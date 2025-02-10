@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Start all services in detached mode
-docker compose up -d
+# Start mongodb first, and attach to its logs
+docker compose up -d mongodb
 
 # Function to wait for a service to be healthy (modify as needed)
 wait_for_service() {
@@ -30,7 +30,6 @@ show_logs_temporarily mongodb
 
 # Finally, attach to other services
 echo "Now attaching logs for prover dry-run service..."
-docker compose logs -f prover-dry-run-service
+docker compose up prover-dry-run-service
 
-echo "Now attaching logs for prover node service..."
-docker compose logs -f prover-node
+docker compose up prover-node
