@@ -459,6 +459,9 @@ Just run
 First time starting after upgrading need download the new merkle db from docker hub so it will take times based on download speed.
 Also it need load 15GB checkpoint merkle db into database so it may take time for the first starting after upgrading.
 
+Tips:
+If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean re-install the docker.
+
 ## Common issues
 
 1.  If you find the `bash scripts/start.sh` failed, please check the error to see wether it related to machine environement. If still cannot get the reason, you can do `docker volume rm prover-node-docker_workspace-volume` and `bash scripts/start.sh` again to try.
