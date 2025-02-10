@@ -29,7 +29,5 @@ show_logs_temporarily() {
 show_logs_temporarily zkwasm-mongodb
 
 # Finally, attach to other services
-echo "Now attaching logs for prover dry-run service..."
 docker compose up prover-dry-run-service
-
 docker compose up prover-node
