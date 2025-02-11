@@ -4,6 +4,7 @@ This is the docker container for the prover node. This container is responsible 
 
 ## Table of Contents
 
+- [Quick Start](#quick-start)
 - [Environment Setup](#environment)
   - [Setting up the Host Machine](#setting-up-the-host-machine)
 - [Building](#building)
@@ -15,11 +16,36 @@ This is the docker container for the prover node. This container is responsible 
   - [GPU Configuration](#gpu-configuration)
   - [MongoDB](#mongodb-configuration)
   - [Multiple Nodes on the same machine](#multiple-nodes-on-the-same-machine)
-- [Quick Start](#quick-start)
 - [Logs](#logs)
-- [Upgrading Prover Node](#upgrading-prover-node)
+- [Upgrading Prover Node Detail](#upgrading-prover-node-detail)
 
 **_If you had installed the prover docker before, please go to the [Upgrading Prover Node](#upgrading-prover-node) section directly for upgrading._**
+
+## Quick Start
+
+### Upgrade prover node
+
+If you had run the prover node services and just want to upgrade to new version, here is the simple steps:
+
+`git pull` to update to the latest version.
+
+`bash scripts/stop.sh` to stop all running prover node docker services
+
+`bash scripts/upgrade.sh` to clean some env files and rebuild the docker images.
+
+`bash scripts/start.sh` to start the prover node docker services
+
+### Setup new prover node
+
+If this is first time to run the prover node services on the node:
+
+Make sure you had reviewed the [Environment Setup](#environment) to setup the node environment.
+
+Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
+
+`bash scripts/build_image.sh` to build the prover node docker image.
+
+`bash scripts/start.sh` to start the prover node docker services
 
 ## Environment
 
@@ -279,43 +305,14 @@ Finally, we use `host` `network_mode`, this is because our server code refers to
 
 </details>
 
-## Quick Start
-
-Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
-
-`bash scripts/stop.sh` can be run to stop the prover docker services which had been run. Better run `docker ps -a` to confirm all the related services are stopped.
-
-`bash scripts/upgrade.sh` is required to run every time you want to upgrade the prover node to new version.
-
-To start the prover node, run:
-
-`bash scripts/start.sh`
-
-To do a full clean start with new db, you can run:
-
-`bash scripts/upgrade_full_clean.sh`
-
-<details>
-  <summary>Quick Start Details</summary>
-
-### Prover Node
-
-The docker image is built locally, and requires building with:
-
-`DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .`
-
-Start all services at once with the command `docker compose up`. However it may clog up the terminal window as they all run in the same terminal so you may run some services in detached mode. For example, use `tmux` to run it.
-
-`docker compose up` will run the base services in order of mongodb, dry-run-service, prover-node service.
-
-</details>
-
 ## Multiple Prover Nodes
 
 ### Multiple Nodes on the same machine
 
 <details>
   <summary>Details</summary>
+
+We do not recommand to run multiple nodes on the same machine but if you really want to do that, here is some help info.
 
 To run multiple prover nodes on the same machine, it is recommended to clone the repository and modify the required files.
 
@@ -414,7 +411,7 @@ sudo ls /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/_data -lh
 sudo vim /var/lib/docker/volumes/prover-node-docker_prover-logs-volume/[filename.log]
 ```
 
-## Upgrading Prover Node
+## Upgrading Prover Node Detail
 
 ### Stop Prover Node
 

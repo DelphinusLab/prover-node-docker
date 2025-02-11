@@ -38,5 +38,13 @@ show_logs_temporarily() {
 
 show_logs_temporarily zkwasm-mongodb
 
+docker compose up -d prover-dry-run-service
+
+show_logs_temporarily prover-node-docker-prover-dry-run-service-1
+
+docker compose up -d params-ftp
+
+show_logs_temporarily prover-node-docker-params-ftp-1
+
 # Finally, attach to other services
 docker compose up
