@@ -1,5 +1,15 @@
 #!/bin/bash
 
+docker compose down  # Stop any existing services
+
+# Check zkwasm (prover node) image exists, if not ask the user to build it.
+if docker images | grep "^zkwasm[[:space:]]" &> /dev/null; then
+    echo "prover node image found"
+else
+    echo "prover node image not found. please build it using 'bash scripts/build.sh'"
+    exit 1
+fi
+
 # Start mongodb first, and attach to its logs
 docker compose up -d mongodb
 
