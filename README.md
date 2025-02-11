@@ -33,6 +33,9 @@ If you had run the prover node services and just want to upgrade to new version,
 
 `bash scripts/start.sh` to start the prover node docker services
 
+Tips:
+If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean re-install the docker.
+
 ### Setup new prover node
 
 If this is first time to run the prover node services on the node:
