@@ -6,7 +6,7 @@ docker compose down  # Stop any existing services
 if docker images | grep "^zkwasm[[:space:]]" &> /dev/null; then
     echo "OK: Prover node image found"
 else
-    echo "ERR: prover node image not found. please build it using 'bash build.sh'"
+    echo "ERR: prover node image not found. please build it using 'bash build_image.sh'"
     exit 1
 fi
 
