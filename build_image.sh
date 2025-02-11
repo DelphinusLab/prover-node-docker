@@ -1,1 +1,0 @@
-DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .

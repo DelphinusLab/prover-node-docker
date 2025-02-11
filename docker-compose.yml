@@ -64,7 +64,7 @@ services:
     healthcheck:
       test: pgrep -f zkwasm-playground
       start_period: 5s
-      interval: 15s
+      interval: 5s
       timeout: 5s
       retries: 3
     volumes:

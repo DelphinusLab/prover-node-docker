@@ -97,7 +97,7 @@ Better clean the old docker image/volumes if you want.
 
 To Build the docker image, run the following command in the root directory of the repository.
 
-`bash build_image.sh`
+`bash scripts/build_image.sh`
 
 We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 
