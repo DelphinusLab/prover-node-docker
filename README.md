@@ -19,8 +19,6 @@ This is the docker container for the prover node. This container is responsible 
 - [Logs](#logs)
 - [Upgrading Prover Node Detail](#upgrading-prover-node-detail)
 
-**_If you had installed the prover docker before, please go to the [Upgrading Prover Node](#upgrading-prover-node) section directly for upgrading._**
-
 ## Quick Start
 
 ### Upgrade prover node
