@@ -15,6 +15,7 @@ services:
     healthcheck:
       # Basic health check to ensure the FTP server is running
       test: "ls -l /var/run/pure-ftpd.pid"
+      start_period: 5s
       interval: 30s
       timeout: 10s
       retries: 3
@@ -62,7 +63,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: pgrep -f zkwasm-playground
-      start_period: 15s
+      start_period: 5s
       interval: 15s
       timeout: 5s
       retries: 3
