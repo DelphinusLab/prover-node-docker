@@ -25,7 +25,7 @@ This is the docker container for the prover node. This container is responsible 
 
 If you had run the prover node services and just want to upgrade to new version, here is the simple steps:
 
-`git pull` to update to the latest version.
+`git pull` to update to the latest version. Resolve the conflict if have.
 
 `bash scripts/stop.sh` to stop all running prover node docker services
 
