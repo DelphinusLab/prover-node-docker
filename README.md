@@ -34,7 +34,7 @@ If you had run the prover node services and just want to upgrade to new version,
 `bash scripts/start.sh` to start the prover node docker services
 
 Tips:
-If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean re-install the docker.
+If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean volumes and restart the services.
 
 ### Setup new prover node
 
@@ -46,7 +46,7 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 
 `bash scripts/build_image.sh` to build the prover node docker image.
 
-`bash scripts/start.sh` to start the prover node docker services
+`bash scripts/start.sh` to start the prover node docker services.
 
 ## Environment
 
@@ -458,7 +458,7 @@ First time starting after upgrading need download the new merkle db from docker 
 Also it need load 15GB checkpoint merkle db into database so it may take time for the first starting after upgrading.
 
 Tips:
-If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean re-install the docker.
+If you accidentally have the db init failed and want to clean the db volume and re-upgrade, you can just do `bash scripts/stop.sh`, `bash scripts/upgrade_full_clean.sh`, `bash scripts/start.sh` to full clean volumes and restart the services.
 
 ## Common issues
 
