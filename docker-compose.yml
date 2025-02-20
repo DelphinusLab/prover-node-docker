@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   params-ftp:
     image: zkwasm/params
@@ -141,6 +143,20 @@ services:
         "/bin/bash",
         "/home/zkwasm/prover-node-release/_start_prover-node-service.sh",
       ]
+  monitor:
+    image: docker:27.5.1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts/.env:/.env
+      - ./scripts/monitor.sh:/monitor.sh
+    command: /bin/sh -c "apk add bash curl && bash monitor.sh"
+    depends_on:
+      - params-ftp
+      - mongodb
+      - prover-dry-run-service
+      - prover-node
+    profiles:
+      - ${RUN_MONITOR}
 volumes:
   workspace-volume:
   prover-logs-volume:
