@@ -54,6 +54,12 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 
 `bash scripts/start.sh` to start the prover node docker services.
 
+### Configuring monitoring and alerts
+
+The monitor service runs alongside the other docker services and send alerts to an internal slack channel. The following variables, located in the [.env file](./scripts/.env), are required to be configured for the monitor service:
+- `CONTAINER_NAMES`: these must be set to the docker containers to be monitored, if default configuration is being used then these don't need to be changed.
+- `ALERT_POST_URL`: if you don't required monitoring service, then this can be left empty and the service won't start, otherwise, please contact the Delphinus team and the url will be generated for you. Do not share this publicly.
+
 ## Environment
 
 The prover node requires a CUDA capable GPU, currently at minimum an RTX 4090.
