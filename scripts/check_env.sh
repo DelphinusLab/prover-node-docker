@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Function to check if a command exists
 check_command() {
     which "$1" > /dev/null 2>&1
@@ -29,9 +31,13 @@ if [ $? -ne 0 ]; then
 fi
 echo "Success: Docker is installed and running."
 
-# Check for Docker Compose
-check_command "docker-compose" || exit 1
-echo "Success: Docker Compose is installed."
+# Check if Docker supports `docker compose`
+docker compose version > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Error: Docker Compose plugin is not installed. Install it with: sudo apt install docker-compose-plugin"
+    exit 1
+fi
+echo "Success: Docker Compose plugin is installed."
 
 # Check for NVIDIA Container Toolkit
 dpkg -l | grep -q "nvidia-container-toolkit"
