@@ -26,7 +26,7 @@ check_command "docker" || exit 1
 # Check if Docker is running
 systemctl is-active --quiet docker
 if [ $? -ne 0 ]; then
-    echo "Error: Docker is installed but not running. Start it using: sudo systemctl start docker"
+    echo "Error: Docker is installed but not running. Start it using: \`sudo systemctl start docker\`"
     exit 1
 fi
 echo "Success: Docker is installed and running."
@@ -34,7 +34,7 @@ echo "Success: Docker is installed and running."
 # Check if Docker supports `docker compose`
 docker compose version > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Error: Docker Compose plugin is not installed. Install it with: sudo apt install docker-compose-plugin"
+    echo "Error: Docker Compose plugin is not installed. Install it with: \`sudo apt install docker-compose-plugin\`"
     exit 1
 fi
 echo "Success: Docker Compose plugin is installed."
@@ -57,4 +57,3 @@ echo "Success: Available disk space is more than 100GB."
 
 # If all checks pass
 echo "All dependencies are installed and working correctly."
-exit 0
