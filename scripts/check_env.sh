@@ -47,13 +47,13 @@ if [ $? -ne 0 ]; then
 fi
 echo "Success: NVIDIA Container Toolkit is installed."
 
-# Check available disk space (must be more than 20GB)
+# Check available disk space (must be more than 50GB)
 AVAILABLE_DISK=$(df / --output=avail -BG | tail -n 1 | tr -d '[:space:]' | sed 's/G//')
-if [ "$AVAILABLE_DISK" -lt 20 ]; then
-    echo "Error: Available disk space is less than 20GB. Current available space: ${AVAILABLE_DISK}GB."
+if [ "$AVAILABLE_DISK" -lt 50 ]; then
+    echo "Error: Available disk space is less than 50GB. Current available space: ${AVAILABLE_DISK}GB."
     exit 1
 fi
-echo "Success: Available disk space is more than 20GB."
+echo "Success: Available disk space is more than 50GB."
 
 # If all checks pass
 echo "All dependencies are installed and working correctly."
