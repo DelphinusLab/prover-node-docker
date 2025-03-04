@@ -31,5 +31,8 @@ docker volume rm prover-node-docker_mongodb_data
 # Remove the image and re-pull the latest image
 docker image rm zkwasm:latest
 
+# Force prune all images as previous merkle db not required
+docker image prune -a -f
+
 # Rebuild image locally
 DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .

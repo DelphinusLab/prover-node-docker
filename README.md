@@ -114,7 +114,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #b3aa65fa0307b95fd9a24c03dfcdaf4649163b90
+- prover-node-release #6ce496da1d68929696dbbd2b3669a868698db6be
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
@@ -400,10 +400,13 @@ Where `service-name` is the name of the SERVICE named in t he docker compose fil
 Example:
 
 Prover node logs
+
 ```
 docker compose logs -f prover-node --tail 100
 ```
+
 Prover dry run logs
+
 ```
 docker compose logs -f prover-dry-run-service --tail 100
 ```
