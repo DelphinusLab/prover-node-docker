@@ -19,36 +19,24 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-  mongodb:
-    image: zkwasm/zkwasm-mongo-merkle:67c61b9f986f484ddbaa55f2
+  rocksdb:
+    image: rhaoio/rhaoio-rocksdb
     attach: false
-    network_mode: "host"
-    environment:
-      # Set this port if 27017 is already used by another service/mongodb instance
-      # Mostly useful if using network_mode: "host", as the port will be shared.
-      - MONGO_INITDB_PORT=27017
-    # ports:
-    #  - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
+      - rocksdb_data:/rocksdb_data
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
-    command: --port 27017 --wiredTigerCacheSizeGB 7
+    restart: "no"
     healthcheck:
-      test: |
-        mongosh --port 27017 --quiet --eval '
-          const ping = db.adminCommand({ ping: 1 }).ok;
-          const init = db.init_status.findOne({ "_id": "init" }) != null;
-          if (ping && init) { quit(0) } else { quit(1) }
-        '
-      interval: 30s
-      start_period: 20s
-      timeout: 10s
-      retries: 10000
-    container_name: zkwasm-mongodb
+      test: ["CMD", "test", "-f", "/rocksdb_data/.initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+    container_name: zkwasm-rocksdb-data
   prover-dry-run-service:
     image: zkwasm:latest
     attach: false
@@ -73,6 +61,8 @@ services:
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
+      # Volume for the rocksdb data directory to persist rocksdb data
+      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb_data
       # Volume for the logs directory to persist logs
       - dry-run-logs-volume:/home/zkwasm/prover-node-release/logs/dry_run
       # configure huge pages for the prover
@@ -88,7 +78,7 @@ services:
     command: bash -c "
       time=$$(date +%Y-%m-%d-%H-%M-%S)
 
-      RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover \
+      RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover --rocksdbworkspace rocksdb_data\
       2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$${time}.log 100M"
   prover-node:
     image: zkwasm:latest
@@ -123,6 +113,8 @@ services:
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
+      # Volume for the rocksdb data directory to persist rocksdb data
+      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb_data
       # Volume for the logs directory to persist logs
       - prover-logs-volume:/home/zkwasm/prover-node-release/logs/prover
       # configure huge pages for the prover
@@ -145,4 +137,4 @@ volumes:
   workspace-volume:
   prover-logs-volume:
   dry-run-logs-volume:
-  mongodb_data:
+  rocksdb_data:
