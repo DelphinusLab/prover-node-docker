@@ -23,7 +23,7 @@ services:
     image: rhaoio/rhaoio-rocksdb
     attach: false
     volumes:
-      - rocksdb_data:/rocksdb_data
+      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb
     logging:
       driver: "json-file"
       options:
@@ -31,7 +31,7 @@ services:
         max-file: "5"
     restart: "no"
     healthcheck:
-      test: ["CMD", "test", "-f", "/rocksdb_data/.initialized"]
+      test: ["CMD", "test", "-f", "/rocksdb/.initialized"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -78,7 +78,7 @@ services:
     command: bash -c "
       time=$$(date +%Y-%m-%d-%H-%M-%S)
 
-      RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover --rocksdbworkspace rocksdb_data \
+      RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover --rocksdbworkspace rocksdb \
       2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$${time}.log 100M"
   prover-node:
     image: zkwasm:latest
