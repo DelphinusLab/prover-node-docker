@@ -62,7 +62,7 @@ services:
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
       # Volume for the rocksdb data directory to persist rocksdb data
-      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb_data
+      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb
       # Volume for the logs directory to persist logs
       - dry-run-logs-volume:/home/zkwasm/prover-node-release/logs/dry_run
       # configure huge pages for the prover
@@ -114,7 +114,7 @@ services:
       # may have to consider handling changes in the workspace directory (delete volume probably)
       - workspace-volume:/home/zkwasm/prover-node-release/workspace
       # Volume for the rocksdb data directory to persist rocksdb data
-      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb_data
+      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb
       # Volume for the logs directory to persist logs
       - prover-logs-volume:/home/zkwasm/prover-node-release/logs/prover
       # configure huge pages for the prover
