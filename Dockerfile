@@ -19,7 +19,7 @@ RUN git config --global url.https://github.com/.insteadOf git@github.com:
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout 6ce496da1d68929696dbbd2b3669a868698db6be
+    git checkout rocks-db
 
 WORKDIR /home/zkwasm/prover-node-release
 
