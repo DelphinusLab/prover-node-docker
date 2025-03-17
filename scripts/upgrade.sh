@@ -1,6 +1,9 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Clean mongodb data for legacy nodes
+docker volume rm prover-node-docker_mongodb_data &> /dev/null
+
 # Call check_dependencies.sh using its absolute path
 sh "$SCRIPT_DIR/check_env.sh"
 
@@ -9,9 +12,6 @@ if [ $? -ne 0 ]; then
     echo "Environment check error. Stopping execution. Please check README Environment for how to set up environment."
     exit 1
 fi
-
-# Clean mongodb data for legacy nodes
-docker volume rm prover-node-docker_mongodb_data &> /dev/null
 
 # This script will perform some basic actions for when the prover node is upgraded.
 # Manually run this script to clear the workspace and rebuild the docker image.
