@@ -25,8 +25,11 @@ docker volume prune -f
 # Remove the workspace volume
 docker volume rm prover-node-docker_workspace-volume
 
-# Remove the mongodb volume
+# Remove the mongodb volume (legacy)
 docker volume rm prover-node-docker_mongodb_data
+
+# Remove rocksdb data
+docker volume rm prover-node-docker_rocksdb_data
 
 # Remove the image and re-pull the latest image
 docker image rm zkwasm:latest
