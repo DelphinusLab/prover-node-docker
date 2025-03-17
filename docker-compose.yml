@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      mongodb:
+      rocksdb:
         condition: service_healthy
     healthcheck:
       test: pgrep -f zkwasm-playground
