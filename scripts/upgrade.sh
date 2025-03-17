@@ -10,6 +10,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Clean mongodb data for legacy nodes
+docker volume rm prover-node-docker_mongodb_data &> /dev/null
+
 # This script will perform some basic actions for when the prover node is upgraded.
 # Manually run this script to clear the workspace and rebuild the docker image.
 
