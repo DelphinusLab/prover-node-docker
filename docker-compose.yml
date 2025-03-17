@@ -23,19 +23,13 @@ services:
     image: rhaoio/rhaoio-rocksdb
     attach: false
     volumes:
-      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb
+      - rocksdb_data:/rocksdb_data
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
     restart: "no"
-    healthcheck:
-      test: ["CMD", "test", "-f", "/rocksdb/.initialized"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 5s
     container_name: zkwasm-rocksdb-data
   prover-dry-run-service:
     image: zkwasm:latest
@@ -48,7 +42,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       rocksdb:
-        condition: service_healthy
+        condition: service_completed_successfully
     healthcheck:
       test: pgrep -f zkwasm-playground
       start_period: 5s
