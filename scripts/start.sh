@@ -10,9 +10,6 @@ else
     exit 1
 fi
 
-# Start mongodb first, and attach to its logs
-docker compose up -d mongodb
-
 # Function to wait for a service to be healthy (modify as needed)
 wait_for_service() {
     service_name=$1
@@ -36,8 +33,7 @@ show_logs_temporarily() {
     kill $log_pid
 }
 
-show_logs_temporarily zkwasm-mongodb
-
+# this will also init the rocksdb service due to depends_on
 docker compose up -d prover-dry-run-service
 
 show_logs_temporarily prover-node-docker-prover-dry-run-service-1

@@ -1,6 +1,9 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Clean mongodb data for legacy nodes
+docker volume rm prover-node-docker_mongodb_data &> /dev/null
+
 # Call check_dependencies.sh using its absolute path
 sh "$SCRIPT_DIR/check_env.sh"
 
