@@ -4,7 +4,7 @@ try_stop_zkwasm_mongodb() {
     docker container rm zkwasm-mongodb &> /dev/null
 }
 
-try_stop_zkwasm_mongodb
-
 # Stop prover node services
 docker compose down
+
+try_stop_zkwasm_mongodb
