@@ -20,7 +20,7 @@ services:
       timeout: 10s
       retries: 3
   rocksdb:
-    image: zkwasm/zkwasm-rocksdb:67da071d61a5ffd0ce1fa2d3
+    image: zkwasm/zkwasm-rocksdb:67da5f7461a5ffd0ce1fa49e
     attach: false
     volumes:
       - rocksdb_data:/rocksdb_data
