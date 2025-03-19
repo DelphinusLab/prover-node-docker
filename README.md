@@ -24,9 +24,9 @@ This is the docker container for the prover node. This container is responsible 
 
 If you had run the prover node services and just want to upgrade to new version, here is the simple steps:
 
-`git pull` to update to the latest version. Resolve the conflict if have. 
+`git stash; git pull; git stash pop` to update to the latest version. Resolve the conflict if have. 
 
-Special notes for this upgrading: for dry_run_config.json need remove the mongodb_uri as we never use mongodb anymore.
+#### Special notes for this upgrading: for dry_run_config.json need remove the mongodb_uri as we never use mongodb anymore.
 
 `bash scripts/stop.sh` to stop all running prover node docker services
 
