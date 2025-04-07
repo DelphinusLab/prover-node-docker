@@ -38,8 +38,8 @@ services:
     runtime: nvidia
     network_mode: "host"
     depends_on:
-      prover-dry-run-service:
-        condition: service_healthy
+      rocksdb:
+        condition: service_completed_successfully
       params-ftp:
         condition: service_healthy
     deploy:
@@ -62,6 +62,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
+      - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
       - ./prover_system_config.json:/home/zkwasm/prover-node-release/prover_system_config.json
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
