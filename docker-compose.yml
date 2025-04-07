@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   params-ftp:
@@ -139,8 +139,6 @@ services:
     command: /bin/sh -c "apk add bash curl && bash monitor.sh"
     depends_on:
       - params-ftp
-      - mongodb
-      - prover-dry-run-service
       - prover-node
     profiles:
       - ${RUN_MONITOR}
