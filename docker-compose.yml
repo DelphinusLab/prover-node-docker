@@ -33,49 +33,6 @@ services:
         max-file: "5"
     restart: "no"
     container_name: zkwasm-rocksdb-data
-  prover-dry-run-service:
-    image: zkwasm:latest
-    attach: false
-    runtime: nvidia
-    network_mode: "host"
-    user: "1001:1001"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      rocksdb:
-        condition: service_completed_successfully
-    healthcheck:
-      test: pgrep -f zkwasm-playground
-      start_period: 5s
-      interval: 5s
-      timeout: 5s
-      retries: 3
-    volumes:
-      - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
-      - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
-      # Volume for the whole workspace directory to persist workspace data
-      # may have to consider handling changes in the workspace directory (delete volume probably)
-      - workspace-volume:/home/zkwasm/prover-node-release/workspace
-      # Volume for the rocksdb data directory to persist rocksdb data
-      - rocksdb_data:/home/zkwasm/prover-node-release/rocksdb
-      # Volume for the logs directory to persist logs
-      - dry-run-logs-volume:/home/zkwasm/prover-node-release/logs/dry_run
-      # configure huge pages for the prover
-      - /dev/hugepages:/dev/hugepages
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-    environment:
-      - TZ=Etc/UTC
-    # Override default command to run as a dry-run service
-    command: bash -c "
-      time=$$(date +%Y-%m-%d-%H-%M-%S)
-
-      RUST_LOG=info ./target/release/zkwasm-playground --dryrunconfig dry_run_config.json -w workspace --dryrun=prover --rocksdbworkspace rocksdb \
-      2>&1 | sudo rotatelogs -e -n 10 logs/dry_run/dry_run_$${time}.log 100M"
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
@@ -105,7 +62,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./prover_config.json:/home/zkwasm/prover-node-release/prover_config.json
-      - ./dry_run_config.json:/home/zkwasm/prover-node-release/dry_run_config.json
       - ./prover_system_config.json:/home/zkwasm/prover-node-release/prover_system_config.json
       # Volume for the whole workspace directory to persist workspace data
       # may have to consider handling changes in the workspace directory (delete volume probably)
