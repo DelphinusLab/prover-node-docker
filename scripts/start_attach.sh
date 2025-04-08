@@ -14,4 +14,4 @@ fi
 
 docker compose down  # Stop any existing services
 
-docker compose up --attach rocksdb --attach params-ftp --attach prover-node
+docker compose up --attach params-ftp --attach prover-node
