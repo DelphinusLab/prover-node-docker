@@ -21,25 +21,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-  rocksdb:
-    image: zkwasm/zkwasm-rocksdb:67db32a861a5ffd0ce1fab45
-    attach: false
-    volumes:
-      - rocksdb_data:/rocksdb_data
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-    restart: "no"
-    container_name: zkwasm-rocksdb-data
   prover-node:
     image: zkwasm:latest
     runtime: nvidia
     network_mode: "host"
     depends_on:
-      rocksdb:
-        condition: service_completed_successfully
       params-ftp:
         condition: service_healthy
     deploy:
