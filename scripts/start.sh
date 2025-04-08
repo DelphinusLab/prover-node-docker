@@ -44,12 +44,6 @@ show_logs_temporarily() {
     # Once the service is ready, stop displaying logs
     kill $log_pid
 }
-
-# this will also init the rocksdb service due to depends_on
-docker compose up -d prover-dry-run-service
-
-show_logs_temporarily prover-node-docker-prover-dry-run-service-1
-
 docker compose up -d params-ftp
 
 show_logs_temporarily prover-node-docker-params-ftp-1
