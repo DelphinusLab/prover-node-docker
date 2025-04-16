@@ -5,8 +5,8 @@ if [ ! -e "scripts/.env" ]; then
     echo "scripts/.env does not exist! Required for start up."
     exit 1
 fi
-source scripts/.env
-if [ "$ALERT_POST_URL" == "" ]; then
+. scripts/.env
+if [ "$ALERT_POST_URL" = "" ]; then
     export RUN_MONITOR="skip"
 else
     export RUN_MONITOR=""
