@@ -26,6 +26,8 @@ if [ $hugepages_free -lt 15000 ]; then
     exit 1
 fi
 
+sudo chown -R 1001:1001 rocksdb
+
 # Download param files from local FTP server
 wget -r -nH -nv --cut-dirs=1 --no-parent --user=ftpuser --password=ftppassword ftp://localhost/params/ -P /home/zkwasm/prover-node-release/workspace/static/ && \
 time=$(date +%Y-%m-%d-%H-%M-%S) && \
