@@ -19,7 +19,7 @@ RUN git config --global url.https://github.com/.insteadOf git@github.com:
 
 RUN git clone https://github.com/DelphinusLab/prover-node-release && \
     cd prover-node-release && \
-    git checkout feature/Feb2025
+    git checkout 11bd77a4933fa4d289627e2b3e5d7e8be58a565f
 
 WORKDIR /home/zkwasm/prover-node-release
 

@@ -24,7 +24,7 @@ This is the docker container for the prover node. This container is responsible 
 
 If you had run the prover node services and just want to upgrade to new version, here is the simple steps:
 
-`git stash; git pull; git stash pop` to update to the latest version. Resolve the conflict if have. 
+`git stash; git pull; git stash pop` to update to the latest version. Resolve the conflict if have.
 
 #### Special notes for this upgrading: for dry_run_config.json need remove the mongodb_uri as we never use mongodb anymore.
 
@@ -57,6 +57,7 @@ Make sure you had reviewed the [Prover Node Configuration](#prover-node-configur
 ### Configuring monitoring and alerts
 
 The monitor service runs alongside the other docker services and send alerts to an internal slack channel. The following variables, located in the [.env file](./scripts/.env), are required to be configured for the monitor service:
+
 - `CONTAINER_NAMES`: these must be set to the docker containers to be monitored, if default configuration is being used then these don't need to be changed.
 - `ALERT_POST_URL`: if you don't required monitoring service, then this can be left empty and the service won't start, otherwise, please contact the Delphinus team and the url will be generated for you. Do not share this publicly.
 
@@ -126,7 +127,7 @@ The image is currently built with
 
 - Ubuntu 22.04
 - CUDA 12.2
-- prover-node-release #395cfe09055811e5b780b8611db57c4fe921bbe7
+- prover-node-release #11bd77a4933fa4d289627e2b3e5d7e8be58a565f
 
 The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
 
