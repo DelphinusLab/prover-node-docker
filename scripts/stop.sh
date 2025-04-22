@@ -2,6 +2,10 @@ try_stop_zkwasm_mongodb() {
     # also try stop previous zkwasm-mongodb service
     docker container stop zkwasm-mongodb >/dev/null 2>&1
     docker container rm zkwasm-mongodb >/dev/null 2>&1
+    docker container stop zkwasm-rocksdb-data >/dev/null 2>&1
+    docker container rm zkwasm-rocksdb-data >/dev/null 2>&1
+    docker container stop prover-node-docker-prover-dry-run-service-1 >/dev/null 2>&1
+    docker container rm prover-node-docker-prover-dry-run-service-1 >/dev/null 2>&1
 }
 
 # Stop prover node services
