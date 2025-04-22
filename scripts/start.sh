@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Set `RUN_MONITOR` to skip if `ALERT_POST_URL` is empty. This disables monitoring if the url is not set.
+if [ ! -e "scripts/.env" ]; then
+    echo "scripts/.env does not exist! Required for start up."
+    exit 1
+fi
+. scripts/.env
+if [ "$ALERT_POST_URL" = "" ]; then
+    export RUN_MONITOR="skip"
+else
+    export RUN_MONITOR=""
+fi
+
 docker compose down  # Stop any existing services
 
 # Check zkwasm (prover node) image exists, if not ask the user to build it.
@@ -32,12 +44,6 @@ show_logs_temporarily() {
     # Once the service is ready, stop displaying logs
     kill $log_pid
 }
-
-# this will also init the rocksdb service due to depends_on
-docker compose up -d prover-dry-run-service
-
-show_logs_temporarily prover-node-docker-prover-dry-run-service-1
-
 docker compose up -d params-ftp
 
 show_logs_temporarily prover-node-docker-params-ftp-1
