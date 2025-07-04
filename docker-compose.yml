@@ -22,7 +22,7 @@ services:
       timeout: 10s
       retries: 3
   prover-node:
-    image: zkwasm:latest
+    image: rhaoio/prover-node-dev:latest
     runtime: nvidia
     network_mode: "host"
     depends_on:
