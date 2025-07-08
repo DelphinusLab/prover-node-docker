@@ -28,6 +28,4 @@ fi
 
 sudo chown -R 1001:1001 rocksdb
 
-# Download param files from local FTP server
-wget -r -nH -nv --cut-dirs=1 --no-parent --user=ftpuser --password=ftppassword ftp://localhost/params/ -P /home/zkwasm/prover-node-release/workspace/static/ && \
 CUDA_VISIBLE_DEVICES=0 RUST_LOG=info RUST_BACKTRACE=1 ./target/release/zkwasm-playground --config prover_config.json -w workspace --proversystemconfig prover_system_config.json -p --rocksdbworkspace rocksdb

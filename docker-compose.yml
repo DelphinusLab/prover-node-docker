@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   prover-node:
-    image: rhaoio/prover-node-dev:latest
+    image: rhaoio/prover-node-dev:0.0.14
     runtime: nvidia
     network_mode: "host"
     deploy:
