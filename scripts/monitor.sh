@@ -52,7 +52,7 @@ get_info_from_logs_and_format() {
     logs=$(docker logs "$container" 2>/dev/null | head -n 70)
     node_addr=$(extract "$logs" "Node address")
     build_ver=$(extract "$logs" "Running build version")
-    printf "Node Address: %s\\nDryRun Address: %s\\nOperating Mode: %s\\nBuild Version: %s\\n" \
+    printf "Node Address: %s\\nBuild Version: %s\\n" \
         "$node_addr" "$build_ver"
 }
 
