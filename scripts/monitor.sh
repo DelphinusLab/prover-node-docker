@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . .env
-. _monitor_config.sh
+. ./_monitor_config.sh
 
 MAX_ALERT_TEXT_SIZE=4000
 LOG_FILTER='s/\{/(/g; s/\}/)/g; s/\"//g'

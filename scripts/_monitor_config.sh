@@ -1,4 +1,4 @@
-
+#!/bin/bash
 # Number of lines of log to be sent in slack alert.
 export N_LOG_LINES=50
 
