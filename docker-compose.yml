@@ -55,7 +55,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./scripts/.env:/.env
-      - ./scripts/_monitor_config.sh:/monitor_config.sh
+      - ./scripts/_monitor_config.sh:/_monitor_config.sh
       - ./scripts/monitor.sh:/monitor.sh
     command: /bin/sh -c "apk add bash curl && bash monitor.sh"
     depends_on:
