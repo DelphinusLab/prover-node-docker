@@ -8,6 +8,7 @@ try_stop_zkwasm_mongodb() {
     docker container rm prover-node-docker-prover-dry-run-service-1 >/dev/null 2>&1
     docker container stop params-ftp >/dev/null 2>&1
     docker container rm params-ftp >/dev/null 2>&1
+    docker image rm zkwasm:latest >/dev/null 2>&1
 }
 
 # Stop prover node services
