@@ -32,4 +32,4 @@ docker volume rm prover-node-docker_mongodb_data
 docker volume rm prover-node-docker_rocksdb_data
 
 # Remove the image and re-pull the latest image
-docker image rm zkwasm:latest
+docker image rm rhaoio/prover-node-dev:latest
