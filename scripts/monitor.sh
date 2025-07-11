@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source .env
+. .env
+. ./_monitor_config.sh
 
 MAX_ALERT_TEXT_SIZE=4000
 LOG_FILTER='s/\{/(/g; s/\}/)/g; s/\"//g'
@@ -50,12 +51,9 @@ get_info_from_logs_and_format() {
 
     container=$1
     logs=$(docker logs "$container" 2>/dev/null | head -n 70)
-    node_addr=$(extract "$logs" "Node address")
-    dryr_addr=$(extract "$logs" "Config Address")
-    oper_mode=$(extract "$logs" "Operating mode")
-    build_ver=$(extract "$logs" "Running build version")
-    printf "Node Address: %s\\nDryRun Address: %s\\nOperating Mode: %s\\nBuild Version: %s\\n" \
-        "$node_addr" "$dryr_addr" "$oper_mode" "$build_ver"
+
+    printf "Node Address: %s\\nNode Description: %s\\n" \
+        "$NODE_ADDRESS" "$NODE_DESCRIPTION"
 }
 
 # Check specified containers for healthy/running status; if neither, then send alert with recent logs.

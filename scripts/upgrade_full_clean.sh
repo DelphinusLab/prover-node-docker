@@ -32,7 +32,4 @@ docker volume rm prover-node-docker_mongodb_data
 docker volume rm prover-node-docker_rocksdb_data
 
 # Remove the image and re-pull the latest image
-docker image rm zkwasm:latest
-
-# Rebuild image locally
-DOCKER_BUILDKIT=0 docker build --rm --network=host -t zkwasm .
+docker image rm zkwasm/prover-node:latest
