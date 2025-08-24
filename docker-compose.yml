@@ -1,33 +1,10 @@
 version: "3.9"
 
 services:
-  params-ftp:
-    image: zkwasm/params
-    network_mode: "host"
-    attach: false
-    # ports:
-    #   - "21:21"
-    #   - "30000-30009:30000-30009"
-    environment:
-      PUBLICHOST: "localhost"
-      FTP_USER_NAME: ftpuser
-      FTP_USER_PASS: ftppassword
-      FTP_USER_HOME: /home/ftpuser
-      # ADDED_FLAGS: "-p 2121:2121 -p 30000-31000:30000-31000"
-    healthcheck:
-      # Basic health check to ensure the FTP server is running
-      test: "ls -l /var/run/pure-ftpd.pid"
-      start_period: 5s
-      interval: 30s
-      timeout: 10s
-      retries: 3
   prover-node:
-    image: zkwasm:latest
+    image: zkwasm/prover-node:latest
     runtime: nvidia
     network_mode: "host"
-    depends_on:
-      params-ftp:
-        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -78,10 +55,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./scripts/.env:/.env
+      - ./scripts/_monitor_config.sh:/_monitor_config.sh
       - ./scripts/monitor.sh:/monitor.sh
     command: /bin/sh -c "apk add bash curl && bash monitor.sh"
     depends_on:
-      - params-ftp
       - prover-node
     profiles:
       - ${RUN_MONITOR}
