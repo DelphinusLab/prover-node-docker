@@ -147,7 +147,7 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 
 `prover_config.json` file is the config file for prover node service.
 
-- `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
+- `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com".
 - `priv_key` - The private key of the prover node. This is used to sign the tasks which were done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your node. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
 
 ### Dry Run Service Configuration
@@ -157,7 +157,7 @@ This service must be run in parallel to the prover node, so running the service 
 
 `dry_run_config.json` file is the config file for prover dry run service, modify the connection strings to the server.
 
-- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node. Currently the public test server's rpc is "https://rpc.zkwasmhub.com:8090".
+- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node. Currently the public test server's rpc is "https://rpc.zkwasmhub.com".
 
 `docker compose up` and use default `docker-compose.yml`.
 
