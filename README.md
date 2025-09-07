@@ -30,7 +30,7 @@ If you had run the prover node services and just want to upgrade to new version,
 
 `bash scripts/stop.sh` to stop all running prover node docker services
 
-`bash scripts/upgrade.sh` to clean some env files and rebuild the docker images.
+`bash scripts/upgrade.sh` to clean env files.
 
 `bash scripts/start.sh` to start the prover node docker services
 
