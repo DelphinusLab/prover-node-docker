@@ -50,8 +50,6 @@ Make sure you had reviewed the [Environment Setup](#environment) to setup the no
 
 Make sure you had reviewed the [Prover Node Configuration](#prover-node-configuration) part and changed the config files.
 
-`bash scripts/build_image.sh` to build the prover node docker image.
-
 `bash scripts/start.sh` to start the prover node docker services.
 
 ### Configuring monitoring and alerts
