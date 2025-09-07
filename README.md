@@ -123,23 +123,7 @@ https://github.com/NVIDIA/nvidia-docker
 
 ## Building
 
-The image is currently built with
-
-- Ubuntu 22.04
-- CUDA 12.2
-- prover-node-release #11bd77a4933fa4d289627e2b3e5d7e8be58a565f
-
-The versions should not be changed unless the prover node is updated. The compiled prover node binary is sensitive to the CUDA version and the Ubuntu version.
-
-### Build the Docker Image
-
-Better clean the old docker image/volumes if you want.
-
-To Build the docker image, run the following command in the root directory of the repository.
-
-`bash scripts/build_image.sh`
-
-We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
+We do not build image locally any more. The image had been put on dockerhub as: zkwasm/prover-node:latest
 
 ## Running
 
@@ -152,16 +136,7 @@ We do not use BuildKit as there are issues with the CUDA runtime and BuildKit.
 
 ### Dry Run Service Configuration
 
-The Dry Run service will be required to run parallel to the prover node. The Dry Run service is responsible for synchronising tasks with the server and ensuring the prover node is working correctly.
-This service must be run in parallel to the prover node, so running the service through docker compose is recommended.
-
-`dry_run_config.json` file is the config file for prover dry run service, modify the connection strings to the server.
-
-- `server_url` - The URL of the server to connect to for tasks. Ensure this is the same as the prover node. Currently the public test server's rpc is "https://rpc.zkwasmhub.com".
-
-`docker compose up` and use default `docker-compose.yml`.
-
-- `private_key` - Please fill the same priv_key as the prover config. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
+There is no more dry run service on prover node so no need config it.
 
 ### HugePages Configuration
 
