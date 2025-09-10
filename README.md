@@ -102,7 +102,9 @@ and then
 
 and then
 
-`sudo apt-get install -y nvidia-container-toolkit`
+`sudo apt-get install -y nvidia-container-toolkit=1.14.3-1`
+
+This is because we find later version like 1.17.8 will have compatibility issue with our image so better use the specific version instead of latest version installing.
 
 Configure Docker daemon to use the `nvidia` runtime as the default runtime.
 
