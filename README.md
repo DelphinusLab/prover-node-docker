@@ -129,10 +129,13 @@ We do not build image locally any more. The image had been put on dockerhub as: 
 
 ### Prover Node Configuration
 
-`prover_config.json` file is the config file for prover node service.
+`prover_config.json` and `prover_system_config.json` file is the config file for prover node service.
 
-- `server_url` - The URL of the server to connect to for tasks. Currently the public test server's rpc is "https://rpc.zkwasmhub.com".
+`prover_config.json`:
 - `priv_key` - The private key of the prover node. This is used to sign the tasks which were done by the prover node. If you want to start multiple prover nodes, please use different priv key for each node as it will represent your node. <mark>**Please note do not add "0x" at the begining of priv.**</mark>
+
+`prover_system_config.json`:
+- `server_url` - The URL of the server to connect to for tasks. By default it is the public server's rpc: "https://rpc.zkwasmhub.com". Normally we do not need change this file.
 
 ### Dry Run Service Configuration
 
