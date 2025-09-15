@@ -1,4 +1,5 @@
 {
+  "server_url": "https://rpc.zkwasmhub.com",
   "big_file_timeout": 1800,
   "get_timeout": 300,
   "post_timeout": 300,
